@@ -1,0 +1,36 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Latest V
+      uses: actions/checkout@v2
+      with:
+        repository: vlang/v
+    - name: Checkout Pendulum Simulation
+      uses: actions/checkout@v2
+      with:
+        path: v-pendulum-simulation
+    - name: Build V
+      run: |
+        make
+        sudo ./v symlink
+    - name: V doctor
+      run: v doctor
+    - name: Build docs
+      run: |
+        rm -f ./v-pendulum-simulation/README.md
+        mv ./v-pendulum-simulation/static/DOCS.md ./v-pendulum-simulation/README.md
+        v doc -m -f html v-pendulum-simulation/
+        mv ./v-pendulum-simulation/_docs/v-pendulum-simulation.html ./v-pendulum-simulation/_docs/index.html
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./v-pendulum-simulation/_docs/

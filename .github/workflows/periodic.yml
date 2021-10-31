@@ -1,0 +1,33 @@
+name: Periodic Check
+on:
+  schedule:
+    - cron:  '31 1,12 * * *'
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Latest V
+      uses: actions/checkout@v2
+      with:
+        repository: vlang/v
+    - name: Checkout Pendulum Simulation
+      uses: actions/checkout@v2
+      with:
+        path: v-pendulum-simulation
+    - name: Build V
+      run: |
+        make
+        sudo ./v symlink
+    - name: V doctor
+      run: v doctor
+    - name: Install Pendulum Simulation dependencies
+      run: |
+        sudo apt-get install --quiet -y --no-install-recommends gfortran liblapacke-dev libopenblas-dev
+        v install vsl
+    - name: Move Pendulum Simulation source code to V Modules
+      run: mv ./v-pendulum-simulation ~/.vmodules
+    - name: Execute Tests using Pure V Backend with Vlib Math
+      run: ~/.vmodules/v-pendulum-simulation/bin/test
+    - name: Execute Tests using Open BLAS Backend
+      run: ~/.vmodules/v-pendulum-simulation/bin/test --use-cblas
