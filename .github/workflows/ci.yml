@@ -25,7 +25,7 @@ jobs:
         v install vsl
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
-    - name: Execute Tests using Pure V Backend with Vlib Math
-      run: ~/.vmodules/v-pendulum-simulation/bin/test
-    - name: Execute Tests using Open BLAS Backend
-      run: ~/.vmodules/v-pendulum-simulation/bin/test --use-cblas
+    - name: Move Pendulum Simulation source code to V Modules
+      run: mv ./v-pendulum-simulation ~/.vmodules
+    - name: Execute Tests
+      run: v test ~/.vmodules/v-pendulum-simulation
