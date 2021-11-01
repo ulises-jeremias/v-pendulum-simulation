@@ -25,7 +25,5 @@ jobs:
         v install vsl
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
-    - name: Move Pendulum Simulation source code to V Modules
-      run: mv ./v-pendulum-simulation ~/.vmodules
     - name: Execute Tests
       run: v test ~/.vmodules/v-pendulum-simulation
