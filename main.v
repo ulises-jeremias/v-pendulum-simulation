@@ -46,7 +46,7 @@ fn main() {
 		gravity: gravity
 	)
 
-	$if debug ? {
+	$if verbose ? {
 		println('Amount of Workers: $workers_amount')
 		println('Image Filename: $fname')
 		println('Width: $width')
