@@ -68,9 +68,9 @@ fn main() {
 		go sim.sim_worker(request_chan, result_chan)
 	}
 
-	go fn (request_chan chan sim.SimRequest, params sim.SimParams, image_params sim.ImageSettings) {
-		height := image_params.height
-		width := image_params.width
+	go fn (request_chan chan sim.SimRequest, params sim.SimParams, image_settings sim.ImageSettings) {
+		height := image_settings.height
+		width := image_settings.width
 
 		mut index := u64(0)
 		println('')
