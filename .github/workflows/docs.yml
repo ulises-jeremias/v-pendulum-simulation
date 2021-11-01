@@ -28,7 +28,7 @@ jobs:
         rm -f ./v-pendulum-simulation/README.md
         mv ./v-pendulum-simulation/static/DOCS.md ./v-pendulum-simulation/README.md
         v doc -m -f html v-pendulum-simulation/
-        mv ./v-pendulum-simulation/_docs/v-pendulum-simulation.html ./v-pendulum-simulation/_docs/index.html
+        mv ./v-pendulum-simulation/_docs/sim.html ./v-pendulum-simulation/_docs/index.html
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
