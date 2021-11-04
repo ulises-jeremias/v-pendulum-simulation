@@ -14,6 +14,12 @@ pub:
 	height int = sim.default_height
 }
 
+pub fn new_image_settings(settings ImageSettings) ImageSettings {
+	return ImageSettings{
+		...settings
+	}
+}
+
 pub struct Pixel {
 	r byte
 	g byte
