@@ -24,15 +24,6 @@ fn main() {
 	filename := args.filename
 	workers_amount := args.workers_amount
 
-	$if verbose ? {
-		println('Amount of Workers: $workers_amount')
-		println('Image Filename: $filename')
-		println('Width: $width')
-		println('Height: $height')
-		println('')
-		println(params)
-	}
-
 	mut writer := sim.ppm_writer_for_fname(filename, image_settings) ?
 	defer {
 		writer.close()
@@ -126,10 +117,16 @@ fn parse_args() ?Args {
 		height: height
 	)
 
-	return Args{
+	args := Args{
 		params: params
 		image_settings: image_settings
 		filename: filename
 		workers_amount: workers_amount
 	}
+
+	$if verbose ? {
+		println(args)
+	}
+
+	return args
 }
