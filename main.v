@@ -40,7 +40,7 @@ fn main() {
 		println('')
 		for y in 0 .. height {
 			term.clear_previous_line()
-			println('Line: $y')
+			println('Line: ${y + 1}')
 			for x in 0 .. width {
 				// setup initial conditions
 				position := sim.new_vector_3d(
