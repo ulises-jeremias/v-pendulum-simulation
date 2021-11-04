@@ -19,12 +19,7 @@ struct Args {
 fn main() {
 	args := parse_args() ?
 
-	params := args.params
-	image_settings := args.image_settings
-	filename := args.filename
-	workers_amount := args.workers_amount
-
-	mut writer := sim.ppm_writer_for_fname(filename, image_settings) ?
+	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
 	defer {
 		writer.close()
 	}
@@ -33,7 +28,7 @@ fn main() {
 	request_chan := chan sim.SimRequest{}
 
 	// start a worker on each core
-	for _ in 0 .. workers_amount {
+	for _ in 0 .. args.workers_amount {
 		go sim.sim_worker(request_chan, result_chan)
 	}
 
@@ -70,9 +65,9 @@ fn main() {
 			}
 		}
 		request_chan.close()
-	}(request_chan, params, image_settings)
+	}(request_chan, args.params, args.image_settings)
 
-	sim.image_worker(mut writer, result_chan, image_settings)
+	sim.image_worker(mut writer, result_chan, args.image_settings)
 }
 
 fn parse_args() ?Args {
