@@ -28,6 +28,7 @@ pub fn (mut state SimState) increment(delta_t f64, params SimParams) {
 	// force due to gravity
 	f_gravity := params.get_grav_force(state)
 
+        // force due to magnets
 	f_magnet1 := params.get_magnet1_force(state)
 	f_magnet2 := params.get_magnet2_force(state)
 	f_magnet3 := params.get_magnet3_force(state)
