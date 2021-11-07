@@ -14,7 +14,7 @@ pub fn new_vector_3d(data Vector3D) Vector3D {
 	}
 }
 
-pub fn (v Vector3D) add(v2 Vector3D) Vector3D {
+pub fn (v Vector3D) + (v2 Vector3D) Vector3D {
 	return Vector3D{
 		x: v.x + v2.x
 		y: v.y + v2.y

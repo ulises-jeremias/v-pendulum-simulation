@@ -30,7 +30,27 @@ pub fn new_sim_params(params SimParams) SimParams {
 pub fn (params SimParams) get_rope_vector(state SimState) Vector3D {
 	rope_origin := new_vector_3d(z: params.rope_length)
 
-	return state.position.add(rope_origin.scale(-1))
+	return state.position + rope_origin.scale(-1)
+}
+
+pub fn (params SimParams) get_forces_sum(state SimState) Vector3D {
+	// force due to gravity
+	f_gravity := params.get_grav_force(state)
+
+	// force due to magnets
+	f_magnet1 := params.get_magnet1_force(state)
+	f_magnet2 := params.get_magnet2_force(state)
+	f_magnet3 := params.get_magnet3_force(state)
+
+	mut f_passive := new_vector_3d(x: 0.0, y: 0.0, z: 0.0)
+	for force in [f_gravity, f_magnet1, f_magnet2, f_magnet3] {
+		f_passive = f_passive + force
+	}
+
+	// force due to tension of the rope
+	f_tension := params.get_tension_force(state, f_passive)
+
+	return f_passive + f_tension
 }
 
 pub fn (params SimParams) get_grav_force(state SimState) Vector3D {
@@ -47,14 +67,14 @@ pub fn (params SimParams) get_magnet_position(theta f64) Vector3D {
 
 pub fn (params SimParams) get_magnet_force(theta f64, state SimState) Vector3D {
 	magnet_position := params.get_magnet_position(theta)
-	mut diff := magnet_position.add(state.position.scale(-1))
+	mut diff := magnet_position + state.position.scale(-1)
 	distance_squared := diff.norm_squared()
 	diff = diff.scale(1.0 / math.sqrt(distance_squared))
 	return diff.scale(params.magnet_strength / distance_squared)
 }
 
 pub fn (params SimParams) get_magnet_dist(theta f64, state SimState) f64 {
-	return params.get_magnet_position(theta).add(state.position.scale(-1)).norm()
+	return (params.get_magnet_position(theta) + state.position.scale(-1)).norm()
 }
 
 pub fn (params SimParams) get_magnet1_force(state SimState) Vector3D {
