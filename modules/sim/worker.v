@@ -21,12 +21,14 @@ pub struct SimResult {
 	magnet3_distance f64
 }
 
-pub fn sim_worker(request_chan chan SimRequest, result_chan chan SimResult) {
+pub fn sim_worker(request_chan chan SimRequest, result_channels []chan SimResult) {
 	// serve sim requests as they come in
 	for {
 		request := <-request_chan or { break }
 		result := compute_result(request)
-		result_chan <- result
+		for ch in result_channels {
+			ch <- result
+		}
 	}
 }
 

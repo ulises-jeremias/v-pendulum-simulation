@@ -18,18 +18,21 @@ struct Args {
 fn main() {
 	args := parse_args() ?
 
-	result_chan := chan sim.SimResult{}
 	request_chan := chan sim.SimRequest{}
+	result_chan := chan sim.SimResult{}
+	defer {
+		result_chan.close()
+		request_chan.close()
+	}
 
 	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
 	defer {
 		writer.close()
-		request_chan.close()
 	}
 
 	// start a worker on each core
 	for _ in 0 .. args.workers_amount {
-		go sim.sim_worker(request_chan, result_chan)
+		go sim.sim_worker(request_chan, [result_chan])
 	}
 
 	handle_request := fn [request_chan] (request sim.SimRequest) ? {
