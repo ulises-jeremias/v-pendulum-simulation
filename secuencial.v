@@ -84,9 +84,7 @@ fn parse_args() ?Args {
 		filename: filename
 	}
 
-	$if verbose ? {
-		println(args)
-	}
+	sim.log('$args')
 
 	return args
 }

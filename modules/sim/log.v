@@ -2,7 +2,7 @@ module sim
 
 // log is a helper function to print debug info
 [inline]
-pub fn log<T>(info T) {
+pub fn log(info string) {
 	$if verbose ? {
 		println(info)
 	}

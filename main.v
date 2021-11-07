@@ -93,7 +93,7 @@ fn parse_args() ?Args {
 		workers_amount: workers_amount
 	}
 
-	sim.log(args)
+	sim.log('$args')
 
 	return args
 }
