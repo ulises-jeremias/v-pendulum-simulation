@@ -33,7 +33,10 @@ pub fn run(params SimParams, image_settings ImageSettings, handle_request SimReq
 				initial: state
 				params: params
 			}
-			handle_request(request) or { break }
+			handle_request(request) or {
+				log(@MOD + '.' + @FN + ': request handler failed. Error $err')
+				break
+			}
 			index++
 		}
 	}

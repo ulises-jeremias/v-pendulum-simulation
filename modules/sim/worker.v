@@ -8,10 +8,11 @@ const (
 )
 
 pub struct SimRequest {
-	id     u64
 	params SimParams
 mut:
 	initial SimState
+pub:
+	id u64
 }
 
 pub struct SimResult {

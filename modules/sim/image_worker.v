@@ -24,7 +24,10 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan SimResult, settings I
 		pixel_buf[result.id].valid = true
 
 		for current_index < total_pixels && pixel_buf[current_index].valid {
-			writer.handle_pixel(pixel_buf[current_index].Pixel)
+			writer.handle_pixel(pixel_buf[current_index].Pixel) or {
+				log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
+				break
+			}
 			current_index++
 		}
 

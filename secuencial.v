@@ -22,19 +22,23 @@ fn main() {
 	width := args.image_settings.width
 	total_pixels := height * width
 
-	mut results := []sim.SimResult{cap: total_pixels}
+	mut results := []sim.SimResult{len: total_pixels}
 
 	handle_request := fn [mut results] (request sim.SimRequest) ? {
 		result := sim.compute_result(request)
-		results << result
+		results[result.id] = result
 	}
 
 	sim.run(args.params, args.image_settings, sim.SimRequestHandler(handle_request))
 
 	for result in results {
 		pixel := sim.compute_pixel(result)
-		writer.handle_pixel(pixel)
+		writer.handle_pixel(pixel) or {
+			sim.log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
+			break
+		}
 	}
+
 	writer.write() ?
 }
 
