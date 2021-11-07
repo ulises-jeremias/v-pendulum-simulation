@@ -3,7 +3,7 @@ module sim
 import math
 
 const (
-	iterations         = 1000
+	max_iterations     = 1000
 	simulation_delta_t = 0.0005
 )
 
@@ -38,8 +38,7 @@ pub fn compute_result(request SimRequest) SimResult {
 	mut state := request.state
 	params := request.params
 
-	for _ in 0 .. sim.iterations {
-		state.increment(sim.simulation_delta_t, params)
+	for _ in 0 .. sim.max_iterations	state.increment(sim.simulation_delta_t, params)
 		if state.done() {
 			println('done!')
 			break
