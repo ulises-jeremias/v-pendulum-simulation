@@ -14,7 +14,7 @@ pub fn run(params SimParams, image_settings ImageSettings, handle_request SimReq
 		term.clear_previous_line()
 		log(@MOD + '.' + @FN + ': image line ${y + 1}')
 		for x in 0 .. width {
-			// setup initial conditions
+			// setup state conditions
 			position := vector(
 				x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
 				y: 0.1 * ((f64(y) - 0.5 * f64(height - 1)) / f64(height - 1))
@@ -30,7 +30,7 @@ pub fn run(params SimParams, image_settings ImageSettings, handle_request SimReq
 			state.satisfy_rope_constraint(params)
 			request := SimRequest{
 				id: index
-				initial: state
+				state: state
 				params: params
 			}
 			handle_request(request) or {
