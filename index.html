@@ -79,9 +79,24 @@
 
 
 </section>
+						<section id="compute_pixel" class="doc-node">
+							<div class="title"><h2>fn compute_pixel <a href="#compute_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">compute_pixel</span><span class="token punctuation">(</span>result SimResult<span class="token punctuation">)</span> Pixel</code></pre>
+
+
+</section>
+						<section id="compute_result" class="doc-node">
+							<div class="title"><h2>fn compute_result <a href="#compute_result">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">compute_result</span><span class="token punctuation">(</span>request SimRequest<span class="token punctuation">)</span> SimResult</code></pre>
+
+
+</section>
 						<section id="image_worker" class="doc-node">
 							<div class="title"><h2>fn image_worker <a href="#image_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">image_worker</span><span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">,</span> result_chan <span class="token builtin">chan</span> SimResult<span class="token punctuation">,</span> settings ImageSettings<span class="token punctuation">)</span></code></pre>
 
+
+</section>
+						<section id="log" class="doc-node">
+							<div class="title"><h2>fn log <a href="#log">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">log</span><span class="token punctuation">(</span>info <span class="token builtin">string</span><span class="token punctuation">)</span></code></pre>
+<p>log is a helper function to print debug info</p>
 
 </section>
 						<section id="new_image_settings" class="doc-node">
@@ -89,18 +104,8 @@
 
 
 </section>
-						<section id="new_sim_params" class="doc-node">
-							<div class="title"><h2>fn new_sim_params <a href="#new_sim_params">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_sim_params</span><span class="token punctuation">(</span>params SimParams<span class="token punctuation">)</span> SimParams</code></pre>
-
-
-</section>
-						<section id="new_sim_state" class="doc-node">
-							<div class="title"><h2>fn new_sim_state <a href="#new_sim_state">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_sim_state</span><span class="token punctuation">(</span>state SimState<span class="token punctuation">)</span> SimState</code></pre>
-
-
-</section>
-						<section id="new_vector_3d" class="doc-node">
-							<div class="title"><h2>fn new_vector_3d <a href="#new_vector_3d">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_vector_3d</span><span class="token punctuation">(</span>data Vector3D<span class="token punctuation">)</span> Vector3D</code></pre>
+						<section id="new_state" class="doc-node">
+							<div class="title"><h2>fn new_state <a href="#new_state">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_state</span><span class="token punctuation">(</span>state SimState<span class="token punctuation">)</span> SimState</code></pre>
 
 
 </section>
@@ -109,16 +114,37 @@
 
 
 </section>
+						<section id="run" class="doc-node">
+							<div class="title"><h2>fn run <a href="#run">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">run</span><span class="token punctuation">(</span>params SimParams<span class="token punctuation">,</span> image_settings ImageSettings<span class="token punctuation">,</span> handle_request SimRequestHandler<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="sim_params" class="doc-node">
+							<div class="title"><h2>fn sim_params <a href="#sim_params">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_params</span><span class="token punctuation">(</span>params SimParams<span class="token punctuation">)</span> SimParams</code></pre>
+
+
+</section>
 						<section id="sim_worker" class="doc-node">
-							<div class="title"><h2>fn sim_worker <a href="#sim_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_worker</span><span class="token punctuation">(</span>request_chan <span class="token builtin">chan</span> SimRequest<span class="token punctuation">,</span> result_chan <span class="token builtin">chan</span> SimResult<span class="token punctuation">)</span></code></pre>
+							<div class="title"><h2>fn sim_worker <a href="#sim_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_worker</span><span class="token punctuation">(</span>request_chan <span class="token builtin">chan</span> SimRequest<span class="token punctuation">,</span> result_channels <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">chan</span> SimResult<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="vector" class="doc-node">
+							<div class="title"><h2>fn vector <a href="#vector">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">vector</span><span class="token punctuation">(</span>data Vector3D<span class="token punctuation">)</span> Vector3D</code></pre>
+
+
+</section>
+						<section id="SimRequestHandler" class="doc-node">
+							<div class="title"><h2>type SimRequestHandler <a href="#SimRequestHandler">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimRequestHandler <span class="token operator">=</span> <span class="token keyword">fn</span> <span class="token punctuation">(</span>request SimRequest<span class="token punctuation">)</span> ?</code></pre>
 
 
 </section>
 						<section id="ImageSettings" class="doc-node">
 							<div class="title"><h2>struct ImageSettings <a href="#ImageSettings">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">ImageSettings</span> <span class="token punctuation">{</span>
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
-	width  <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_width
-	height <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_height
+	width      <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_width
+	height     <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_height
+	cache_size <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">200</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -135,8 +161,9 @@
 						<section id="PPMWriter" class="doc-node">
 							<div class="title"><h2>struct PPMWriter <a href="#PPMWriter">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">PPMWriter</span> <span class="token punctuation">{</span>
 <span class="token keyword">mut</span><span class="token punctuation">:</span>
-	file  os<span class="token punctuation">.</span>File
-	cache <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span>
+	file       os<span class="token punctuation">.</span>File
+	cache      <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span>
+	cache_size <span class="token builtin">int</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -147,7 +174,12 @@
 
 </section>
 						<section id="PPMWriter.handle_pixel" class="doc-node">
-							<div class="title"><h2>fn (PPMWriter) handle_pixel <a href="#PPMWriter.handle_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">)</span> <span class="token function">handle_pixel</span><span class="token punctuation">(</span>p Pixel<span class="token punctuation">)</span></code></pre>
+							<div class="title"><h2>fn (PPMWriter) handle_pixel <a href="#PPMWriter.handle_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">)</span> <span class="token function">handle_pixel</span><span class="token punctuation">(</span>p Pixel<span class="token punctuation">)</span> ?</code></pre>
+
+
+</section>
+						<section id="PPMWriter.flush" class="doc-node">
+							<div class="title"><h2>fn (PPMWriter) flush <a href="#PPMWriter.flush">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">)</span> <span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span> ?</code></pre>
 
 
 </section>
@@ -225,20 +257,22 @@
 </section>
 						<section id="SimRequest" class="doc-node">
 							<div class="title"><h2>struct SimRequest <a href="#SimRequest">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">SimRequest</span> <span class="token punctuation">{</span>
-	id     <span class="token builtin">u64</span>
 	params SimParams
-<span class="token keyword">mut</span><span class="token punctuation">:</span>
-	initial SimState
+	state  SimState
+<span class="token keyword">pub</span><span class="token punctuation">:</span>
+	id <span class="token builtin">u64</span>
 <span class="token punctuation">}</span></code></pre>
 
 
 </section>
 						<section id="SimResult" class="doc-node">
 							<div class="title"><h2>struct SimResult <a href="#SimResult">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">SimResult</span> <span class="token punctuation">{</span>
-	SimRequest
+	state            SimState
 	magnet1_distance <span class="token builtin">f64</span>
 	magnet2_distance <span class="token builtin">f64</span>
 	magnet3_distance <span class="token builtin">f64</span>
+<span class="token keyword">pub</span><span class="token punctuation">:</span>
+	id <span class="token builtin">u64</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -304,7 +338,7 @@
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 7 Nov 2021 01:45:35
+							Powered by vdoc. Generated on: 7 Nov 2021 21:44:41
 						</div>
 					</div>
 					
