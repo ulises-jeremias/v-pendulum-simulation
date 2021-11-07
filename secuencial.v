@@ -3,7 +3,6 @@ module main
 import flag
 import os
 import sim
-import term
 
 struct Args {
 	params         sim.SimParams
@@ -20,48 +19,21 @@ fn main() {
 	}
 
 	height := args.image_settings.height
-        width := args.image_settings.width
-        total_pixels := height * width
+	width := args.image_settings.width
+	total_pixels := height * width
 
-        mut results := []sim.SimResult{cap: total_pixels}
+	mut results := []sim.SimResult{cap: total_pixels}
 
-        mut index := u64(0)
-        println('')
-        for y in 0 .. height {
-                term.clear_previous_line()
-                println('Line: ${y + 1}')
-                for x in 0 .. width {
-                        // setup initial conditions
-                        position := sim.vector(
-                                x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
-                                y: 0.1 * ((f64(y) - 0.5 * f64(height - 1)) / f64(height - 1))
-                                z: 0.0
-                        )
-                        velocity := sim.vector(x: 0, y: 0, z: 0)
+	handle_request := fn [mut results] (request sim.SimRequest) ? {
+		result := sim.compute_result(request)
+		results << result
+	}
 
-                        mut state := sim.new_state(
-                                position: position
-                                velocity: velocity
-                        )
-
-                        state.satisfy_rope_constraint(args.params)
-                        request := sim.SimRequest{
-                                id: index
-                                initial: state
-                                params: args.params
-                        }
-
-                        result := sim.handle_request(request)
-
-                        results << result
-
-                        index++
-                }
-        }
+	sim.run(args.params, args.image_settings, sim.SimRequestHandler(handle_request))
 
 	for result in results {
 		pixel := sim.compute_pixel(result)
-                writer.handle_pixel(pixel)
+		writer.handle_pixel(pixel)
 	}
 	writer.write() ?
 }

@@ -4,7 +4,6 @@ import flag
 import os
 import sim
 import runtime
-import term
 
 // customisable through setting VJOBS
 const max_parallel_workers = runtime.nr_jobs()
@@ -19,53 +18,25 @@ struct Args {
 fn main() {
 	args := parse_args() ?
 
+	result_chan := chan sim.SimResult{}
+	request_chan := chan sim.SimRequest{}
+
 	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
 	defer {
 		writer.close()
+		request_chan.close()
 	}
-
-	result_chan := chan sim.SimResult{}
-	request_chan := chan sim.SimRequest{}
 
 	// start a worker on each core
 	for _ in 0 .. args.workers_amount {
 		go sim.sim_worker(request_chan, result_chan)
 	}
 
-	go fn (request_chan chan sim.SimRequest, params sim.SimParams, image_settings sim.ImageSettings) {
-		height := image_settings.height
-		width := image_settings.width
+	handle_request := fn [request_chan] (request sim.SimRequest) ? {
+		request_chan <- request
+	}
 
-		mut index := u64(0)
-		println('')
-		for y in 0 .. height {
-			term.clear_previous_line()
-			println('Line: ${y + 1}')
-			for x in 0 .. width {
-				// setup initial conditions
-				position := sim.vector(
-					x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
-					y: 0.1 * ((f64(y) - 0.5 * f64(height - 1)) / f64(height - 1))
-					z: 0.0
-				)
-				velocity := sim.vector(x: 0, y: 0, z: 0)
-
-				mut state := sim.new_state(
-					position: position
-					velocity: velocity
-				)
-
-				state.satisfy_rope_constraint(params)
-				request_chan <- sim.SimRequest{
-					id: index
-					initial: state
-					params: params
-				}
-				index++
-			}
-		}
-		request_chan.close()
-	}(request_chan, args.params, args.image_settings)
+	go sim.run(args.params, args.image_settings, sim.SimRequestHandler(handle_request))
 
 	sim.image_worker(mut writer, result_chan, args.image_settings)
 }
@@ -119,9 +90,7 @@ fn parse_args() ?Args {
 		workers_amount: workers_amount
 	}
 
-	$if verbose ? {
-		println(args)
-	}
+	sim.log(args)
 
 	return args
 }

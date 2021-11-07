@@ -25,12 +25,12 @@ pub fn sim_worker(request_chan chan SimRequest, result_chan chan SimResult) {
 	// serve sim requests as they come in
 	for {
 		request := <-request_chan or { break }
-		result := handle_request(request)
+		result := compute_result(request)
 		result_chan <- result
 	}
 }
 
-pub fn handle_request(request SimRequest) SimResult {
+pub fn compute_result(request SimRequest) SimResult {
 	mut state := request.initial
 	params := request.params
 
