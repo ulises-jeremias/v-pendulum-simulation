@@ -8,7 +8,7 @@ pub struct Vector3D {
 	z f64
 }
 
-pub fn new_vector_3d(data Vector3D) Vector3D {
+pub fn vector(data Vector3D) Vector3D {
 	return Vector3D{
 		...data
 	}

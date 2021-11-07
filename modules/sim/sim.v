@@ -7,7 +7,7 @@ mut:
 	accel    Vector3D
 }
 
-pub fn new_sim_state(state SimState) SimState {
+pub fn new_state(state SimState) SimState {
 	return SimState{
 		...state
 	}
@@ -16,7 +16,7 @@ pub fn new_sim_state(state SimState) SimState {
 pub fn (mut state SimState) satisfy_rope_constraint(params SimParams) {
 	mut rope_vector := params.get_rope_vector(state)
 	rope_vector = rope_vector.scale(params.rope_length / rope_vector.norm())
-	state.position = new_vector_3d(z: params.rope_length) + rope_vector
+	state.position = vector(z: params.rope_length) + rope_vector
 }
 
 pub fn (mut state SimState) increment(delta_t f64, params SimParams) {

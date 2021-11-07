@@ -35,7 +35,7 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan SimResult, settings I
 	writer.write() or { panic('Could not write image') }
 }
 
-fn compute_pixel(result SimResult) Pixel {
+pub fn compute_pixel(result SimResult) Pixel {
 	closest_to_m1 := result.magnet1_distance < result.magnet2_distance
 		&& result.magnet1_distance < result.magnet3_distance
 	closest_to_m2 := result.magnet2_distance < result.magnet1_distance

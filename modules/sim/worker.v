@@ -30,7 +30,7 @@ pub fn sim_worker(request_chan chan SimRequest, result_chan chan SimResult) {
 	}
 }
 
-fn handle_request(request SimRequest) SimResult {
+pub fn handle_request(request SimRequest) SimResult {
 	mut state := request.initial
 	params := request.params
 

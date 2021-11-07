@@ -21,14 +21,14 @@ pub struct SimParams {
 	gravity         f64 = sim.default_gravity
 }
 
-pub fn new_sim_params(params SimParams) SimParams {
+pub fn sim_params(params SimParams) SimParams {
 	return SimParams{
 		...params
 	}
 }
 
 pub fn (params SimParams) get_rope_vector(state SimState) Vector3D {
-	rope_origin := new_vector_3d(z: params.rope_length)
+	rope_origin := vector(z: params.rope_length)
 
 	return state.position + rope_origin.scale(-1)
 }
@@ -42,7 +42,7 @@ pub fn (params SimParams) get_forces_sum(state SimState) Vector3D {
 	f_magnet2 := params.get_magnet2_force(state)
 	f_magnet3 := params.get_magnet3_force(state)
 
-	mut f_passive := new_vector_3d(x: 0.0, y: 0.0, z: 0.0)
+	mut f_passive := vector(x: 0.0, y: 0.0, z: 0.0)
 	for force in [f_gravity, f_magnet1, f_magnet2, f_magnet3] {
 		f_passive = f_passive + force
 	}
@@ -54,11 +54,11 @@ pub fn (params SimParams) get_forces_sum(state SimState) Vector3D {
 }
 
 pub fn (params SimParams) get_grav_force(state SimState) Vector3D {
-	return new_vector_3d(z: -params.bearing_mass * params.gravity)
+	return vector(z: -params.bearing_mass * params.gravity)
 }
 
 pub fn (params SimParams) get_magnet_position(theta f64) Vector3D {
-	return new_vector_3d(
+	return vector(
 		x: math.cos(theta) * params.magnet_spacing
 		y: math.sin(theta) * params.magnet_spacing
 		z: -params.magnet_height

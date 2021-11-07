@@ -3,17 +3,12 @@ module main
 import flag
 import os
 import sim
-import runtime
 import term
-
-// customisable through setting VJOBS
-const max_parallel_workers = runtime.nr_jobs()
 
 struct Args {
 	params         sim.SimParams
 	image_settings sim.ImageSettings
 	filename       string
-	workers_amount int = max_parallel_workers
 }
 
 fn main() {
@@ -24,50 +19,51 @@ fn main() {
 		writer.close()
 	}
 
-	result_chan := chan sim.SimResult{}
-	request_chan := chan sim.SimRequest{}
+	height := args.image_settings.height
+        width := args.image_settings.width
+        total_pixels := height * width
 
-	// start a worker on each core
-	for _ in 0 .. args.workers_amount {
-		go sim.sim_worker(request_chan, result_chan)
+        mut results := []sim.SimResult{cap: total_pixels}
+
+        mut index := u64(0)
+        println('')
+        for y in 0 .. height {
+                term.clear_previous_line()
+                println('Line: ${y + 1}')
+                for x in 0 .. width {
+                        // setup initial conditions
+                        position := sim.vector(
+                                x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
+                                y: 0.1 * ((f64(y) - 0.5 * f64(height - 1)) / f64(height - 1))
+                                z: 0.0
+                        )
+                        velocity := sim.vector(x: 0, y: 0, z: 0)
+
+                        mut state := sim.new_state(
+                                position: position
+                                velocity: velocity
+                        )
+
+                        state.satisfy_rope_constraint(args.params)
+                        request := sim.SimRequest{
+                                id: index
+                                initial: state
+                                params: args.params
+                        }
+
+                        result := sim.handle_request(request)
+
+                        results << result
+
+                        index++
+                }
+        }
+
+	for result in results {
+		pixel := sim.compute_pixel(result)
+                writer.handle_pixel(pixel)
 	}
-
-	go fn (request_chan chan sim.SimRequest, params sim.SimParams, image_settings sim.ImageSettings) {
-		height := image_settings.height
-		width := image_settings.width
-
-		mut index := u64(0)
-		println('')
-		for y in 0 .. height {
-			term.clear_previous_line()
-			println('Line: ${y + 1}')
-			for x in 0 .. width {
-				// setup initial conditions
-				position := sim.vector(
-					x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
-					y: 0.1 * ((f64(y) - 0.5 * f64(height - 1)) / f64(height - 1))
-					z: 0.0
-				)
-				velocity := sim.vector(x: 0, y: 0, z: 0)
-
-				mut state := sim.new_state(
-					position: position
-					velocity: velocity
-				)
-
-				state.satisfy_rope_constraint(params)
-				request_chan <- sim.SimRequest{
-					id: index
-					initial: state
-					params: params
-				}
-				index++
-			}
-		}
-		request_chan.close()
-	}(request_chan, args.params, args.image_settings)
-
-	sim.image_worker(mut writer, result_chan, args.image_settings)
+	writer.write() ?
 }
 
 fn parse_args() ?Args {
@@ -77,8 +73,6 @@ fn parse_args() ?Args {
 	fp.limit_free_args(0, 0) ?
 	fp.description('This is a pendulum simulation written in pure V')
 	fp.skip_executable()
-
-	workers_amount := fp.int('workers', 0, max_parallel_workers, 'amount of workers to use on simulation. Defaults to $max_parallel_workers')
 
 	// output parameters
 	width := fp.int('width', `w`, sim.default_width, 'width of the image output. Defaults to $sim.default_width')
@@ -116,7 +110,6 @@ fn parse_args() ?Args {
 		params: params
 		image_settings: image_settings
 		filename: filename
-		workers_amount: workers_amount
 	}
 
 	$if verbose ? {
