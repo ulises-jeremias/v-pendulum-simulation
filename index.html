@@ -80,7 +80,7 @@
 
 </section>
 						<section id="compute_pixel" class="doc-node">
-							<div class="title"><h2>fn compute_pixel <a href="#compute_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">compute_pixel</span><span class="token punctuation">(</span>result SimResult<span class="token punctuation">)</span> Pixel</code></pre>
+							<div class="title"><h2>fn compute_pixel <a href="#compute_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">compute_pixel</span><span class="token punctuation">(</span>result SimResult<span class="token punctuation">)</span> gx<span class="token punctuation">.</span>Color</code></pre>
 
 
 </section>
@@ -131,7 +131,7 @@
 </section>
 						<section id="vector" class="doc-node">
 							<div class="title"><h2>fn vector <a href="#vector">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">vector</span><span class="token punctuation">(</span>data Vector3D<span class="token punctuation">)</span> Vector3D</code></pre>
-
+<p>vector creates a Vector3D passing x,y,z as parameteres</p>
 
 </section>
 						<section id="SimRequestHandler" class="doc-node">
@@ -145,15 +145,6 @@
 	width      <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_width
 	height     <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_height
 	cache_size <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">200</span>
-<span class="token punctuation">}</span></code></pre>
-
-
-</section>
-						<section id="Pixel" class="doc-node">
-							<div class="title"><h2>struct Pixel <a href="#Pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">Pixel</span> <span class="token punctuation">{</span>
-	r <span class="token builtin">byte</span>
-	g <span class="token builtin">byte</span>
-	b <span class="token builtin">byte</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -174,7 +165,7 @@
 
 </section>
 						<section id="PPMWriter.handle_pixel" class="doc-node">
-							<div class="title"><h2>fn (PPMWriter) handle_pixel <a href="#PPMWriter.handle_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">)</span> <span class="token function">handle_pixel</span><span class="token punctuation">(</span>p Pixel<span class="token punctuation">)</span> ?</code></pre>
+							<div class="title"><h2>fn (PPMWriter) handle_pixel <a href="#PPMWriter.handle_pixel">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">)</span> <span class="token function">handle_pixel</span><span class="token punctuation">(</span>p gx<span class="token punctuation">.</span>Color<span class="token punctuation">)</span> ?</code></pre>
 
 
 </section>
@@ -308,37 +299,37 @@
 	y <span class="token builtin">f64</span>
 	z <span class="token builtin">f64</span>
 <span class="token punctuation">}</span></code></pre>
-
+<p>Vector3D is a 3D vector</p>
 
 </section>
 						<section id="Vector3D.+" class="doc-node">
 							<div class="title"><h2>fn (Vector3D) + <a href="#Vector3D.+">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>v Vector3D<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>v2 Vector3D<span class="token punctuation">)</span> Vector3D</code></pre>
-
+<p>addition</p>
 
 </section>
-						<section id="Vector3D.dot" class="doc-node">
-							<div class="title"><h2>fn (Vector3D) dot <a href="#Vector3D.dot">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>v Vector3D<span class="token punctuation">)</span> <span class="token function">dot</span><span class="token punctuation">(</span>v2 Vector3D<span class="token punctuation">)</span> <span class="token builtin">f64</span></code></pre>
-
+						<section id="Vector3D.*" class="doc-node">
+							<div class="title"><h2>fn (Vector3D) * <a href="#Vector3D.*">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>v Vector3D<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>v2 Vector3D<span class="token punctuation">)</span> <span class="token builtin">f64</span></code></pre>
+<p>dot product</p>
 
 </section>
 						<section id="Vector3D.scale" class="doc-node">
 							<div class="title"><h2>fn (Vector3D) scale <a href="#Vector3D.scale">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>v Vector3D<span class="token punctuation">)</span> <span class="token function">scale</span><span class="token punctuation">(</span>scalar <span class="token builtin">f64</span><span class="token punctuation">)</span> Vector3D</code></pre>
-
+<p>scale gets a scaled vector</p>
 
 </section>
 						<section id="Vector3D.norm_squared" class="doc-node">
 							<div class="title"><h2>fn (Vector3D) norm_squared <a href="#Vector3D.norm_squared">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>v Vector3D<span class="token punctuation">)</span> <span class="token function">norm_squared</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">f64</span></code></pre>
-
+<p>norm_squared returns the square of the norm of the vector</p>
 
 </section>
 						<section id="Vector3D.norm" class="doc-node">
 							<div class="title"><h2>fn (Vector3D) norm <a href="#Vector3D.norm">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>v Vector3D<span class="token punctuation">)</span> <span class="token function">norm</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">f64</span></code></pre>
-
+<p>norm returns the norm of the vector</p>
 
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 7 Nov 2021 21:44:41
+							Powered by vdoc. Generated on: 7 Nov 2021 22:29:16
 						</div>
 					</div>
 					
