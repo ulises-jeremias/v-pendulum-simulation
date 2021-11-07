@@ -92,5 +92,5 @@ pub fn (params SimParams) get_magnet3_force(state SimState) Vector3D {
 pub fn (params SimParams) get_tension_force(state SimState, f_passive Vector3D) Vector3D {
 	rope_vector := params.get_rope_vector(state)
 	rope_vector_norm := rope_vector.scale(1.0 / rope_vector.norm())
-	return rope_vector_norm.scale(-1.0 * rope_vector_norm.dot(f_passive))
+	return rope_vector_norm.scale(-1.0 * (rope_vector_norm * f_passive))
 }

@@ -1,5 +1,6 @@
 module sim
 
+import gx
 import os
 
 pub const (
@@ -19,12 +20,6 @@ pub fn new_image_settings(settings ImageSettings) ImageSettings {
 	return ImageSettings{
 		...settings
 	}
-}
-
-pub struct Pixel {
-	r byte
-	g byte
-	b byte
 }
 
 pub struct PPMWriter {
@@ -48,7 +43,7 @@ pub fn (mut writer PPMWriter) start_for_file(fname string, settings ImageSetting
 	writer.file.writeln('P6 $settings.width $settings.height 255') ?
 }
 
-pub fn (mut writer PPMWriter) handle_pixel(p Pixel) ? {
+pub fn (mut writer PPMWriter) handle_pixel(p gx.Color) ? {
 	if writer.cache.len >= writer.cache_size {
 		writer.write() ?
 		writer.flush() ?
