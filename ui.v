@@ -45,6 +45,8 @@ fn init(mut app App) {
 	}
 
 	go sim.run(app.args.params, app.args.image_settings, sim.SimRequestHandler(handle_request))
+
+        go pixels_worker(mut app)
 }
 
 fn get_pixel_coords(app App, result sim.SimResult) (f32, f32) {
@@ -53,24 +55,28 @@ fn get_pixel_coords(app App, result sim.SimResult) (f32, f32) {
 
 fn frame(mut app App) {
 	app.gg.begin()
-	select {
-		result := <-app.result_chan {
-			// find the closest magnet
-			pixel_color := sim.compute_pixel(result)
+	for pixel in app.pixels {
+		app.gg.set_pixel(pixel.x, pixel.y, pixel.color)
+	}
+	app.gg.end()
+}
 
-			x, y := get_pixel_coords(app, result)
-			app.pixels << Pixel{
-				x: x
-				y: y
-				color: pixel_color
-			}
+fn pixels_worker(mut app App) {
+	for {
+		select {
+			result := <-app.result_chan {
+				// find the closest magnet
+				pixel_color := sim.compute_pixel(result)
 
-			for pixel in app.pixels {
-				app.gg.set_pixel(pixel.x, pixel.y, pixel.color)
+				x, y := get_pixel_coords(app, result)
+				app.pixels << Pixel{
+					x: x
+					y: y
+					color: pixel_color
+				}
 			}
 		}
 	}
-	app.gg.end()
 }
 
 fn main() {
@@ -102,8 +108,8 @@ fn main() {
 		frame_fn: frame
 		init_fn: init
 	)
-
-	app.gg.run()
+	
+        app.gg.run()
 }
 
 fn parse_args() ?Args {
