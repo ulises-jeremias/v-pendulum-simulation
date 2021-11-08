@@ -21,22 +21,21 @@ struct Pixel {
 struct Args {
 	params         sim.SimParams
 	image_settings sim.ImageSettings
-	filename       string
 	workers_amount int = max_parallel_workers
 }
 
 struct App {
-	args         Args
+	Args
 	request_chan chan sim.SimRequest
 	result_chan  chan sim.SimResult
 mut:
 	gg     &gg.Context = 0
-	pixels []Pixel
+	pixels [][]gx.Color
 }
 
 fn init(mut app App) {
 	// start a worker on each core
-	for _ in 0 .. app.args.workers_amount {
+	for _ in 0 .. app.workers_amount {
 		go sim.sim_worker(app.request_chan, [app.result_chan])
 	}
 	request_chan := app.request_chan
@@ -44,20 +43,22 @@ fn init(mut app App) {
 		request_chan <- request
 	}
 
-	go sim.run(app.args.params, app.args.image_settings, sim.SimRequestHandler(handle_request))
+	go sim.run(app.params, app.image_settings, sim.SimRequestHandler(handle_request))
 
         go pixels_worker(mut app)
 }
 
-fn get_pixel_coords(app App, result sim.SimResult) (f32, f32) {
-	return int(result.id) % app.args.image_settings.width, int(result.id) / app.args.image_settings.width
+fn get_pixel_coords(app App, result sim.SimResult) (int, int) {
+	return int(result.id) % app.image_settings.width, int(result.id) / app.image_settings.height
 }
 
 fn frame(mut app App) {
 	app.gg.begin()
-	for pixel in app.pixels {
-		app.gg.set_pixel(pixel.x, pixel.y, pixel.color)
-	}
+        for y, row in app.pixels {
+                for x, color in row {
+                        app.gg.set_pixel(x, y, color)
+                }
+        }
 	app.gg.end()
 }
 
@@ -69,11 +70,7 @@ fn pixels_worker(mut app App) {
 				pixel_color := sim.compute_pixel(result)
 
 				x, y := get_pixel_coords(app, result)
-				app.pixels << Pixel{
-					x: x
-					y: y
-					color: pixel_color
-				}
+				app.pixels[y][x] = pixel_color
 			}
 		}
 	}
@@ -89,14 +86,9 @@ fn main() {
 		request_chan.close()
 	}
 
-	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
-	defer {
-		writer.close()
-	}
-
 	mut app := &App{
-		args: args
-		pixels: []Pixel{cap: args.image_settings.width * args.image_settings.height}
+		Args: args
+		pixels: [][]gx.Color{len: args.image_settings.height, init: []gx.Color{len: args.image_settings.width}}
 	}
 	app.gg = gg.new_context(
 		width: args.image_settings.width
@@ -125,7 +117,6 @@ fn parse_args() ?Args {
 	// output parameters
 	width := fp.int('width', `w`, sim.default_width, 'width of the image output. Defaults to $sim.default_width')
 	height := fp.int('height', `h`, sim.default_height, 'height of the image output. Defaults to $sim.default_height')
-	filename := fp.string('output', `o`, 'out.ppm', 'name of the image output. Defaults to out.ppm')
 
 	// simulation parameters
 	rope_length := fp.float('rope-length', 0, sim.default_rope_length, 'rope length to use on simulation. Defaults to $sim.default_rope_length')
@@ -157,7 +148,6 @@ fn parse_args() ?Args {
 	args := Args{
 		params: params
 		image_settings: image_settings
-		filename: filename
 		workers_amount: workers_amount
 	}
 
