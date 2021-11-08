@@ -29,8 +29,8 @@ mut:
 	cache_size int
 }
 
-pub fn ppm_writer_for_fname(fname string, settings ImageSettings) ?PPMWriter {
-	mut writer := PPMWriter{
+pub fn ppm_writer_for_fname(fname string, settings ImageSettings) ?&PPMWriter {
+	mut writer := &PPMWriter{
 		cache_size: settings.cache_size
 		cache: []byte{cap: settings.cache_size}
 	}
