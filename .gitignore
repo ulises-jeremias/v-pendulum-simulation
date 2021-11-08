@@ -10,3 +10,5 @@ fns.txt
 /docs/build
 *.ppm
 main
+parallel
+secuencial
