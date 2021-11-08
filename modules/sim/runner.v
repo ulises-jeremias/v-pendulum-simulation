@@ -11,7 +11,9 @@ pub fn run(params SimParams, image_settings ImageSettings, handle_request SimReq
 	mut index := u64(0)
 	log('')
 	for y in 0 .. height {
-		term.clear_previous_line()
+		$if verbose ? {
+			term.clear_previous_line()
+		}
 		log(@MOD + '.' + @FN + ': image line ${y + 1}')
 		for x in 0 .. width {
 			// setup state conditions
