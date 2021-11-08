@@ -45,7 +45,7 @@ fn init(mut app App) {
 
 	go sim.run(app.params, app.image_settings, sim.SimRequestHandler(handle_request))
 
-        go pixels_worker(mut app)
+	go pixels_worker(mut app)
 }
 
 fn get_pixel_coords(app App, result sim.SimResult) (int, int) {
@@ -54,11 +54,11 @@ fn get_pixel_coords(app App, result sim.SimResult) (int, int) {
 
 fn frame(mut app App) {
 	app.gg.begin()
-        for y, row in app.pixels {
-                for x, color in row {
-                        app.gg.set_pixel(x, y, color)
-                }
-        }
+	for y, row in app.pixels {
+		for x, color in row {
+			app.gg.set_pixel(x, y, color)
+		}
+	}
 	app.gg.end()
 }
 
@@ -100,8 +100,8 @@ fn main() {
 		frame_fn: frame
 		init_fn: init
 	)
-	
-        app.gg.run()
+
+	app.gg.run()
 }
 
 fn parse_args() ?Args {

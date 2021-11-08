@@ -46,11 +46,11 @@ pub fn compute_pixel(result SimResult) gx.Color {
 	closest_to_m2 := result.magnet2_distance < result.magnet1_distance
 		&& result.magnet2_distance < result.magnet3_distance
 
-        if closest_to_m1 {
-                return gx.red
-        } else if closest_to_m2 {
-                return gx.green
-        } else {
-                return gx.blue
-        }
+	if closest_to_m1 {
+		return gx.red
+	} else if closest_to_m2 {
+		return gx.green
+	} else {
+		return gx.blue
+	}
 }
