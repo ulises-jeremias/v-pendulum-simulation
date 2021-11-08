@@ -21,6 +21,7 @@ struct Pixel {
 struct Args {
 	params         sim.SimParams
 	image_settings sim.ImageSettings
+	filename       string
 	workers_amount int = max_parallel_workers
 }
 
@@ -51,15 +52,24 @@ fn main() {
 		init_fn: init
 	)
 
+	img_result_chan := chan sim.SimResult{}
 	defer {
+		img_result_chan.close()
 		app.request_chan.close()
 		app.result_chan.close()
+	}
+
+	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
+	defer {
+		writer.close()
 	}
 
 	// start a worker on each core
 	for _ in 0 .. app.workers_amount {
 		go sim.sim_worker(app.request_chan, [app.result_chan, img_result_chan])
 	}
+
+	go sim.image_worker(mut writer, img_result_chan, args.image_settings)
 
 	request_chan := app.request_chan
 	handle_request := fn [request_chan] (request sim.SimRequest) ? {
@@ -116,6 +126,7 @@ fn parse_args() ?Args {
 	// output parameters
 	width := fp.int('width', `w`, sim.default_width, 'width of the image output. Defaults to $sim.default_width')
 	height := fp.int('height', `h`, sim.default_height, 'height of the image output. Defaults to $sim.default_height')
+	filename := fp.string('output', `o`, 'out.ppm', 'name of the image output. Defaults to out.ppm')
 
 	// simulation parameters
 	rope_length := fp.float('rope-length', 0, sim.default_rope_length, 'rope length to use on simulation. Defaults to $sim.default_rope_length')
@@ -146,6 +157,7 @@ fn parse_args() ?Args {
 
 	args := Args{
 		params: params
+		filename: filename
 		image_settings: image_settings
 		workers_amount: workers_amount
 	}
