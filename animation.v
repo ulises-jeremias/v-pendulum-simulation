@@ -33,6 +33,34 @@ mut:
 	pixels [][]gx.Color
 }
 
+fn main() {
+	args := parse_args() ?
+
+	request_chan := chan sim.SimRequest{}
+	result_chan := chan sim.SimResult{}
+	defer {
+		result_chan.close()
+		request_chan.close()
+	}
+
+	mut app := &App{
+		Args: args
+		pixels: [][]gx.Color{len: args.image_settings.height, init: []gx.Color{len: args.image_settings.width}}
+	}
+	app.gg = gg.new_context(
+		width: args.image_settings.width
+		height: args.image_settings.height
+		create_window: true
+		window_title: 'V Pendulum Simulation'
+		user_data: app
+		bg_color: bg_color
+		frame_fn: frame
+		init_fn: init
+	)
+
+	app.gg.run()
+}
+
 fn init(mut app App) {
 	// start a worker on each core
 	for _ in 0 .. app.workers_amount {
@@ -74,34 +102,6 @@ fn pixels_worker(mut app App) {
 			}
 		}
 	}
-}
-
-fn main() {
-	args := parse_args() ?
-
-	request_chan := chan sim.SimRequest{}
-	result_chan := chan sim.SimResult{}
-	defer {
-		result_chan.close()
-		request_chan.close()
-	}
-
-	mut app := &App{
-		Args: args
-		pixels: [][]gx.Color{len: args.image_settings.height, init: []gx.Color{len: args.image_settings.width}}
-	}
-	app.gg = gg.new_context(
-		width: args.image_settings.width
-		height: args.image_settings.height
-		create_window: true
-		window_title: 'V Pendulum Simulation'
-		user_data: app
-		bg_color: bg_color
-		frame_fn: frame
-		init_fn: init
-	)
-
-	app.gg.run()
 }
 
 fn parse_args() ?Args {
