@@ -2,7 +2,6 @@ module main
 
 import gg
 import gx
-import os
 import runtime
 import sim
 import sim.args as simargs
