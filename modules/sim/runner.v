@@ -32,7 +32,7 @@ pub fn run(params SimParams, handle_request SimRequestHandler, grid_settings Gri
 		$if verbose ? {
 			term.clear_previous_line()
 		}
-		log(@MOD + '.' + @FN + ': image line ${y + 1}')
+		log(@MOD + '.' + @FN + ': y: ${y + 1}')
 		for x in 0 .. width {
 			// setup state conditions
 			position := vector(
