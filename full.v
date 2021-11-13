@@ -1,11 +1,11 @@
 module main
 
-import flag
 import gg
 import gx
 import os
 import runtime
 import sim
+import sim.args as simargs
 import sim.img
 
 // customisable through setting VJOBS
@@ -19,15 +19,8 @@ struct Pixel {
 	color gx.Color
 }
 
-struct Args {
-	params         sim.SimParams
-	image_settings img.ImageSettings
-	filename       string
-	workers_amount int = max_parallel_workers
-}
-
 struct App {
-	Args
+	args         simargs.ParallelArgs
 	request_chan chan sim.SimRequest
 	result_chan  chan sim.SimResult
 mut:
@@ -36,15 +29,15 @@ mut:
 }
 
 fn main() {
-	args := parse_args() ?
+	args := simargs.parse_args() ?
 
 	mut app := &App{
-		Args: args
-		pixels: [][]gx.Color{len: args.image_settings.height, init: []gx.Color{len: args.image_settings.width}}
+		args: args as simargs.ParallelArgs
+		pixels: [][]gx.Color{len: args.grid.height, init: []gx.Color{len: args.grid.width}}
 	}
 	app.gg = gg.new_context(
-		width: args.image_settings.width
-		height: args.image_settings.height
+		width: args.grid.width
+		height: args.grid.height
 		create_window: true
 		window_title: 'V Pendulum Simulation'
 		user_data: app
@@ -60,24 +53,24 @@ fn main() {
 		app.result_chan.close()
 	}
 
-	mut writer := img.ppm_writer_for_fname(args.filename, args.image_settings) ?
+	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
 	defer {
 		writer.close()
 	}
 
 	// start a worker on each core
-	for _ in 0 .. app.workers_amount {
+	for _ in 0 .. app.args.workers_amount {
 		go sim.sim_worker(app.request_chan, [app.result_chan, img_result_chan])
 	}
 
-	go img.image_worker(mut writer, img_result_chan, args.image_settings)
+	go img.image_worker(mut writer, img_result_chan, img.image_settings_from_grid(args.grid))
 
 	request_chan := app.request_chan
 	handle_request := fn [request_chan] (request sim.SimRequest) ? {
 		request_chan <- request
 	}
 
-	go sim.run(app.params, sim.SimRequestHandler(handle_request), app.image_settings.to_grid_settings())
+	go sim.run(app.args.params, sim.SimRequestHandler(handle_request), app.args.grid)
 
 	app.gg.run()
 }
@@ -87,7 +80,7 @@ fn init(mut app App) {
 }
 
 fn get_pixel_coords(app App, result sim.SimResult) (int, int) {
-	return int(result.id) % app.image_settings.width, int(result.id) / app.image_settings.height
+	return int(result.id) % app.args.grid.width, int(result.id) / app.args.grid.height
 }
 
 fn frame(mut app App) {
@@ -112,58 +105,4 @@ fn pixels_worker(mut app App) {
 			}
 		}
 	}
-}
-
-fn parse_args() ?Args {
-	mut fp := flag.new_flag_parser(os.args)
-	fp.application('vps')
-	fp.version('v0.1.0')
-	fp.limit_free_args(0, 0) ?
-	fp.description('This is a pendulum simulation written in pure V')
-	fp.skip_executable()
-
-	workers_amount := fp.int('workers', 0, max_parallel_workers, 'amount of workers to use on simulation. Defaults to $max_parallel_workers')
-
-	// output parameters
-	width := fp.int('width', `w`, sim.default_width, 'width of the image output. Defaults to $sim.default_width')
-	height := fp.int('height', `h`, sim.default_height, 'height of the image output. Defaults to $sim.default_height')
-	filename := fp.string('output', `o`, 'out.ppm', 'name of the image output. Defaults to out.ppm')
-
-	// simulation parameters
-	rope_length := fp.float('rope-length', 0, sim.default_rope_length, 'rope length to use on simulation. Defaults to $sim.default_rope_length')
-	bearing_mass := fp.float('bearing-mass', 0, sim.default_bearing_mass, 'bearing mass to use on simulation. Defaults to $sim.default_bearing_mass')
-	magnet_spacing := fp.float('magnet-spacing', 0, sim.default_magnet_spacing, 'magnet spacing to use on simulation. Defaults to $sim.default_magnet_spacing')
-	magnet_height := fp.float('magnet-height', 0, sim.default_magnet_height, 'magnet height to use on simulation. Defaults to $sim.default_magnet_height')
-	magnet_strength := fp.float('magnet-strength', 0, sim.default_magnet_strength, 'magnet strength to use on simulation. Defaults to $sim.default_magnet_strength')
-	gravity := fp.float('gravity', 0, sim.default_gravity, 'gravity to use on simulation. Defaults to $sim.default_gravity')
-
-	fp.finalize() or {
-		println(fp.usage())
-		return none
-	}
-
-	params := sim.sim_params(
-		rope_length: rope_length
-		bearing_mass: bearing_mass
-		magnet_spacing: magnet_spacing
-		magnet_height: magnet_height
-		magnet_strength: magnet_strength
-		gravity: gravity
-	)
-
-	image_settings := img.new_image_settings(
-		width: width
-		height: height
-	)
-
-	args := Args{
-		params: params
-		filename: filename
-		image_settings: image_settings
-		workers_amount: workers_amount
-	}
-
-	sim.log('$args')
-
-	return args
 }

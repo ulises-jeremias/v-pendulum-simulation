@@ -18,6 +18,13 @@ pub fn new_image_settings(settings ImageSettings) ImageSettings {
 	}
 }
 
+pub fn image_settings_from_grid(grid sim.GridSettings) ImageSettings {
+	return ImageSettings{
+		width: grid.width
+		height: grid.height
+	}
+}
+
 pub fn (s ImageSettings) to_grid_settings() sim.GridSettings {
 	return sim.GridSettings{
 		width: s.width
