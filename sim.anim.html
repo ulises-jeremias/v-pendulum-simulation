@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="x-ua-compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>sim.args | vdoc</title>
+		<title>sim.anim | vdoc</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,52 +43,20 @@
 				<nav class="search hidden"></nav>
 				<nav class="content hidden">
 					<ul>
-						<li class="open"><div class="menu-row"><svg xmlns="http://www.w3.org/2000/svg" class="dropdown-arrow" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 10l5 5 5-5z"/></svg><a href="./sim.html">sim</a></div><ul><li><a href="./sim.anim.html">anim</a></li><li class="active"><a href="./sim.args.html">args</a></li><li><a href="./sim.img.html">img</a></li></ul></li>
+						<li class="open"><div class="menu-row"><svg xmlns="http://www.w3.org/2000/svg" class="dropdown-arrow" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 10l5 5 5-5z"/></svg><a href="./sim.html">sim</a></div><ul><li class="active"><a href="./sim.anim.html">anim</a></li><li><a href="./sim.args.html">args</a></li><li><a href="./sim.img.html">img</a></li></ul></li>
 					</ul>
 				</nav>
 			</header>
 			<div class="doc-scrollview">
 				<div class="doc-container">
 					<div class="doc-content">
-						<section id="readme_sim.args" class="doc-node">
-							<div class="title"><h1> sim.args <a href="#readme_sim.args">#</a></h1></div>
+						<section id="readme_sim.anim" class="doc-node">
+							<div class="title"><h1> sim.anim <a href="#readme_sim.anim">#</a></h1></div>
 
 </section>
 
-						<section id="parse_args" class="doc-node">
-							<div class="title"><h2>fn parse_args <a href="#parse_args">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">parse_args</span><span class="token punctuation">(</span>config ParserSettings<span class="token punctuation">)</span> ?SimArgs</code></pre>
-
-
-</section>
-						<section id="SimArgs" class="doc-node">
-							<div class="title"><h2>type SimArgs <a href="#SimArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimArgs <span class="token operator">=</span> ParallelArgs <span class="token operator">|</span> SecuencialArgs</code></pre>
-
-
-</section>
-						<section id="ParallelArgs" class="doc-node">
-							<div class="title"><h2>struct ParallelArgs <a href="#ParallelArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">ParallelArgs</span> <span class="token punctuation">{</span>
-	SecuencialArgs
-<span class="token keyword">pub</span><span class="token punctuation">:</span>
-	workers_amount <span class="token builtin">int</span> <span class="token operator">=</span> args<span class="token punctuation">.</span>max_parallel_workers
-<span class="token punctuation">}</span></code></pre>
-
-
-</section>
-						<section id="ParserSettings" class="doc-node">
-							<div class="title"><h2>struct ParserSettings <a href="#ParserSettings">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">ParserSettings</span> <span class="token punctuation">{</span>
-	secuencial <span class="token builtin">bool</span>
-	img        <span class="token builtin">bool</span>
-<span class="token punctuation">}</span></code></pre>
-
-
-</section>
-						<section id="SecuencialArgs" class="doc-node">
-							<div class="title"><h2>struct SecuencialArgs <a href="#SecuencialArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">SecuencialArgs</span> <span class="token punctuation">{</span>
-<span class="token keyword">pub</span><span class="token punctuation">:</span>
-	params   sim<span class="token punctuation">.</span>SimParams
-	grid     sim<span class="token punctuation">.</span>GridSettings
-	filename <span class="token builtin">string</span>
-<span class="token punctuation">}</span></code></pre>
+						<section id="new_app" class="doc-node">
+							<div class="title"><h2>fn new_app <a href="#new_app">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_app</span><span class="token punctuation">(</span>args simargs<span class="token punctuation">.</span>ParallelArgs<span class="token punctuation">)</span> <span class="token operator">&</span>App</code></pre>
 
 
 </section>
@@ -97,19 +65,7 @@
 							Powered by vdoc. Generated on: 13 Nov 2021 22:23:01
 						</div>
 					</div>
-					<div class="doc-toc"><ul><li class="open"><a href="#parse_args">fn parse_args</a>        <ul>
-</ul>
-</li>
-<li class="open"><a href="#SimArgs">type SimArgs</a>        <ul>
-</ul>
-</li>
-<li class="open"><a href="#ParallelArgs">struct ParallelArgs</a>        <ul>
-</ul>
-</li>
-<li class="open"><a href="#ParserSettings">struct ParserSettings</a>        <ul>
-</ul>
-</li>
-<li class="open"><a href="#SecuencialArgs">struct SecuencialArgs</a>        <ul>
+					<div class="doc-toc"><ul><li class="open"><a href="#new_app">fn new_app</a>        <ul>
 </ul>
 </li>
 </ul></div>
