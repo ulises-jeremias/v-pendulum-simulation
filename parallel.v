@@ -3,7 +3,6 @@ module main
 import sim
 import sim.args as simargs
 import sim.img
-import runtime
 
 fn main() {
 	args := simargs.parse_args() ? as simargs.ParallelArgs
