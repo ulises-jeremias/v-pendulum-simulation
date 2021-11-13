@@ -29,10 +29,10 @@ mut:
 }
 
 fn main() {
-	args := simargs.parse_args() ?
+	args := simargs.parse_args() ? as simargs.ParallelArgs
 
 	mut app := &App{
-		args: args as simargs.ParallelArgs
+		args: args
 		pixels: [][]gx.Color{len: args.grid.height, init: []gx.Color{len: args.grid.width}}
 	}
 	app.gg = gg.new_context(
