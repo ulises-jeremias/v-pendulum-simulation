@@ -23,28 +23,28 @@ Reactive Programming extensions for the V language
 - Secuencial Simulation
 
 ```sh
-$ v -prod secuencial.v
+$ v -gc boehm -prod secuencial.v
 $ ./secuencial # execute ./secuencial -h for more info
 ```
 
 - Parallel Simulation
 
 ```sh
-$ v -prod parallel.v
+$ v -gc boehm -prod parallel.v
 $ ./parallel # execute ./parallel -h for more info
 ```
 
 - Parallel Simulation with Graphic User Interface
 
 ```sh
-$ v -prod animation.v
+$ v -gc boehm -prod animation.v
 $ ./animation # execute ./animation -h for more info
 ```
 
 - Full Parallel Simulation with Graphic User Interface and Image Output
 
 ```sh
-$ v -prod full.v
+$ v -gc boehm -prod full.v
 $ ./full # execute ./full -h for more info
 ```
 

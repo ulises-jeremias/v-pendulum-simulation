@@ -62,7 +62,7 @@ pub fn (mut writer PPMWriter) handle_pixel(p gx.Color) ? {
 }
 
 pub fn (mut writer PPMWriter) flush() ? {
-	writer.cache = []byte{cap: writer.cache_size}
+	writer.cache.clear()
 }
 
 pub fn (mut writer PPMWriter) write() ? {
