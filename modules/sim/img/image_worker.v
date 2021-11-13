@@ -1,6 +1,7 @@
-module sim
+module img
 
 import gx
+import sim
 
 struct ValidColor {
 	gx.Color
@@ -8,7 +9,7 @@ mut:
 	valid bool
 }
 
-pub fn image_worker(mut writer PPMWriter, result_chan chan SimResult, settings ImageSettings) {
+pub fn image_worker(mut writer PPMWriter, result_chan chan sim.SimResult, settings ImageSettings) {
 	width := settings.width
 	height := settings.height
 	total_pixels := width * height
@@ -27,7 +28,7 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan SimResult, settings I
 
 		for current_index < total_pixels && pixel_buf[current_index].valid {
 			writer.handle_pixel(pixel_buf[current_index].Color) or {
-				log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
+				sim.log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
 				break
 			}
 			current_index++
@@ -40,7 +41,7 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan SimResult, settings I
 	writer.write() or { panic('Could not write image') }
 }
 
-pub fn compute_pixel(result SimResult) gx.Color {
+pub fn compute_pixel(result sim.SimResult) gx.Color {
 	closest_to_m1 := result.magnet1_distance < result.magnet2_distance
 		&& result.magnet1_distance < result.magnet3_distance
 	closest_to_m2 := result.magnet2_distance < result.magnet1_distance

@@ -4,8 +4,9 @@ import flag
 import gg
 import gx
 import os
-import sim
 import runtime
+import sim
+import sim.img
 
 // customisable through setting VJOBS
 const max_parallel_workers = runtime.nr_jobs()
@@ -20,7 +21,7 @@ struct Pixel {
 
 struct Args {
 	params         sim.SimParams
-	image_settings sim.ImageSettings
+	image_settings img.ImageSettings
 	workers_amount int = max_parallel_workers
 }
 
@@ -66,7 +67,7 @@ fn main() {
 		request_chan <- request
 	}
 
-	go sim.run(app.params, app.image_settings, sim.SimRequestHandler(handle_request))
+	go sim.run(app.params, sim.SimRequestHandler(handle_request), app.image_settings.to_grid_settings())
 
 	app.gg.run()
 }
@@ -94,7 +95,7 @@ fn pixels_worker(mut app App) {
 		select {
 			result := <-app.result_chan {
 				// find the closest magnet
-				pixel_color := sim.compute_pixel(result)
+				pixel_color := img.compute_pixel(result)
 
 				x, y := get_pixel_coords(app, result)
 				app.pixels[y][x] = pixel_color
@@ -139,7 +140,7 @@ fn parse_args() ?Args {
 		gravity: gravity
 	)
 
-	image_settings := sim.new_image_settings(
+	image_settings := img.new_image_settings(
 		width: width
 		height: height
 	)

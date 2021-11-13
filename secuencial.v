@@ -3,17 +3,18 @@ module main
 import flag
 import os
 import sim
+import sim.img
 
 struct Args {
 	params         sim.SimParams
-	image_settings sim.ImageSettings
+	image_settings img.ImageSettings
 	filename       string
 }
 
 fn main() {
 	args := parse_args() ?
 
-	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
+	mut writer := img.ppm_writer_for_fname(args.filename, args.image_settings) ?
 	defer {
 		writer.close()
 	}
@@ -29,10 +30,10 @@ fn main() {
 		results[result.id] = result
 	}
 
-	sim.run(args.params, args.image_settings, sim.SimRequestHandler(handle_request))
+	sim.run(args.params, sim.SimRequestHandler(handle_request), args.image_settings.to_grid_settings())
 
 	for result in results {
-		pixel := sim.compute_pixel(result)
+		pixel := img.compute_pixel(result)
 		writer.handle_pixel(pixel) or {
 			sim.log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
 			break
@@ -77,7 +78,7 @@ fn parse_args() ?Args {
 		gravity: gravity
 	)
 
-	image_settings := sim.new_image_settings(
+	image_settings := img.new_image_settings(
 		width: width
 		height: height
 	)

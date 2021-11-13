@@ -1,12 +1,8 @@
-module sim
+module img
 
 import gx
 import os
-
-pub const (
-	default_width  = 600
-	default_height = 600
-)
+import sim
 
 [params]
 pub struct ImageSettings {
@@ -19,6 +15,13 @@ pub:
 pub fn new_image_settings(settings ImageSettings) ImageSettings {
 	return ImageSettings{
 		...settings
+	}
+}
+
+pub fn (s ImageSettings) to_grid_settings() sim.GridSettings {
+	return sim.GridSettings{
+		width: s.width
+		height: s.height
 	}
 }
 
@@ -56,7 +59,6 @@ pub fn (mut writer PPMWriter) flush() ? {
 }
 
 pub fn (mut writer PPMWriter) write() ? {
-	// log(@MOD + '.' + @STRUCT + '.' + @FN + ': writing ${writer.cache.len} bytes')
 	writer.file.write(writer.cache) ?
 }
 

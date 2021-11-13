@@ -15,12 +15,12 @@ pub:
 }
 
 pub struct SimResult {
-	state            SimState
+	state SimState
+pub:
 	magnet1_distance f64
 	magnet2_distance f64
 	magnet3_distance f64
-pub:
-	id u64
+	id               u64
 }
 
 pub fn sim_worker(request_chan chan SimRequest, result_channels []chan SimResult) {

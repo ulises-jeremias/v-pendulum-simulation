@@ -4,9 +4,27 @@ import term
 
 pub type SimRequestHandler = fn (request SimRequest) ?
 
-pub fn run(params SimParams, image_settings ImageSettings, handle_request SimRequestHandler) {
-	height := image_settings.height
-	width := image_settings.width
+pub const (
+	default_width  = 600
+	default_height = 600
+)
+
+[params]
+pub struct GridSettings {
+pub:
+	width  int = sim.default_width
+	height int = sim.default_height
+}
+
+pub fn new_grid_settings(settings GridSettings) GridSettings {
+	return GridSettings{
+		...settings
+	}
+}
+
+pub fn run(params SimParams, handle_request SimRequestHandler, grid_settings GridSettings) {
+	height := grid_settings.height
+	width := grid_settings.width
 
 	mut index := u64(0)
 	log('')

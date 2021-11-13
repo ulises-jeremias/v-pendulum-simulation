@@ -3,6 +3,7 @@ module main
 import flag
 import os
 import sim
+import sim.img
 import runtime
 
 // customisable through setting VJOBS
@@ -10,7 +11,7 @@ const max_parallel_workers = runtime.nr_jobs()
 
 struct Args {
 	params         sim.SimParams
-	image_settings sim.ImageSettings
+	image_settings img.ImageSettings
 	filename       string
 	workers_amount int = max_parallel_workers
 }
@@ -25,7 +26,7 @@ fn main() {
 		request_chan.close()
 	}
 
-	mut writer := sim.ppm_writer_for_fname(args.filename, args.image_settings) ?
+	mut writer := img.ppm_writer_for_fname(args.filename, args.image_settings) ?
 	defer {
 		writer.close()
 	}
@@ -39,9 +40,9 @@ fn main() {
 		request_chan <- request
 	}
 
-	go sim.run(args.params, args.image_settings, sim.SimRequestHandler(handle_request))
+	go sim.run(args.params, sim.SimRequestHandler(handle_request), args.image_settings.to_grid_settings())
 
-	sim.image_worker(mut writer, result_chan, args.image_settings)
+	img.image_worker(mut writer, result_chan, args.image_settings)
 }
 
 fn parse_args() ?Args {
@@ -81,7 +82,7 @@ fn parse_args() ?Args {
 		gravity: gravity
 	)
 
-	image_settings := sim.new_image_settings(
+	image_settings := img.new_image_settings(
 		width: width
 		height: height
 	)
