@@ -50,7 +50,7 @@ fn init(mut app App) {
 
 fn frame(mut app App) {
 	app.gg.begin()
-        app.draw()
+	app.draw()
 	app.gg.end()
 }
 
