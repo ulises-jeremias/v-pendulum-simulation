@@ -23,7 +23,7 @@ fn main() {
 	}
 
 	// start a worker on each core
-	for _ in 0 .. app.args.workers_amount {
+	for _ in 0 .. app.args.workers {
 		go sim.sim_worker(app.request_chan, [app.result_chan, img_result_chan])
 	}
 
