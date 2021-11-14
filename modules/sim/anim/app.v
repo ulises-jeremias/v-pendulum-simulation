@@ -54,7 +54,7 @@ fn frame(mut app App) {
 	app.gg.end()
 }
 
-fn draw(mut app App) {
+fn (mut app App) draw() {
 	mut istream_image := app.gg.get_cached_image_by_idx(app.iidx)
 	istream_image.update_pixel_data(&app.pixels[0])
 	app.gg.draw_image(0, 0, app.args.grid.width, app.args.grid.height, istream_image)
