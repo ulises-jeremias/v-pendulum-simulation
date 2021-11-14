@@ -20,13 +20,14 @@ pub:
 	result_chan  chan sim.SimResult
 pub mut:
 	gg     &gg.Context = 0
-	pixels [][]gx.Color
+	iidx   int
+	pixels []u32
 }
 
 pub fn new_app(args simargs.ParallelArgs) &App {
 	mut app := &App{
 		args: args
-		pixels: [][]gx.Color{len: args.grid.height, init: []gx.Color{len: args.grid.width}}
+		pixels: []u32{len: args.grid.height * args.grid.width}
 	}
 	app.gg = gg.new_context(
 		width: args.grid.width
@@ -42,19 +43,17 @@ pub fn new_app(args simargs.ParallelArgs) &App {
 }
 
 fn init(mut app App) {
-	go pixels_worker(mut app)
-}
-
-fn get_pixel_coords(app App, result sim.SimResult) (int, int) {
-	return int(result.id) % app.args.grid.width, int(result.id) / app.args.grid.height
+	app.iidx = app.gg.new_streaming_image(app.args.grid.width, app.args.grid.height, 4,
+		pixel_format: .rgba8)
+	for _ in 0 .. app.args.workers_amount {
+		go pixels_worker(mut app)
+	}
 }
 
 fn frame(mut app App) {
 	app.gg.begin()
-	for y, row in app.pixels {
-		for x, color in row {
-			app.gg.set_pixel(x, y, color)
-		}
-	}
+	mut istream_image := app.gg.get_cached_image_by_idx(app.iidx)
+	istream_image.update_pixel_data(&app.pixels[0])
+	app.gg.draw_image(0, 0, app.args.grid.width, app.args.grid.height, istream_image)
 	app.gg.end()
 }
