@@ -50,8 +50,12 @@ fn init(mut app App) {
 
 fn frame(mut app App) {
 	app.gg.begin()
+        app.draw()
+	app.gg.end()
+}
+
+fn draw(mut app App) {
 	mut istream_image := app.gg.get_cached_image_by_idx(app.iidx)
 	istream_image.update_pixel_data(&app.pixels[0])
 	app.gg.draw_image(0, 0, app.args.grid.width, app.args.grid.height, istream_image)
-	app.gg.end()
 }
