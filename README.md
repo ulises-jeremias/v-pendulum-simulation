@@ -1,5 +1,3 @@
-# v-pendulum-simulation
-
 <div align="center">
 <h1>Pendulum Simulation in V</h1>
 
