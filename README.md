@@ -16,8 +16,6 @@
 
 </div>
 
-Reactive Programming extensions for the V language
-
 ## Run the examples
 
 - Secuencial Simulation
