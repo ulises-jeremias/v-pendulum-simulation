@@ -100,7 +100,7 @@
 
 </section>
 						<section id="run" class="doc-node">
-							<div class="title"><h2>fn run <a href="#run">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">run</span><span class="token punctuation">(</span>params SimParams<span class="token punctuation">,</span> handle_request SimRequestHandler<span class="token punctuation">,</span> grid_settings GridSettings<span class="token punctuation">)</span></code></pre>
+							<div class="title"><h2>fn run <a href="#run">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">run</span><span class="token punctuation">(</span>params SimParams<span class="token punctuation">,</span> settings RunnerSettings<span class="token punctuation">)</span></code></pre>
 
 
 </section>
@@ -110,7 +110,7 @@
 
 </section>
 						<section id="sim_worker" class="doc-node">
-							<div class="title"><h2>fn sim_worker <a href="#sim_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_worker</span><span class="token punctuation">(</span>request_chan <span class="token builtin">chan</span> SimRequest<span class="token punctuation">,</span> result_channels <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">chan</span> SimResult<span class="token punctuation">)</span></code></pre>
+							<div class="title"><h2>fn sim_worker <a href="#sim_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_worker</span><span class="token punctuation">(</span>id <span class="token builtin">int</span><span class="token punctuation">,</span> request_chan <span class="token builtin">chan</span> SimRequest<span class="token punctuation">,</span> result_channels <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">chan</span> SimResult<span class="token punctuation">)</span></code></pre>
 
 
 </section>
@@ -119,8 +119,18 @@
 <p>vector creates a Vector3D passing x,y,z as parameteres</p>
 
 </section>
+						<section id="SimFinishHandler" class="doc-node">
+							<div class="title"><h2>type SimFinishHandler <a href="#SimFinishHandler">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimFinishHandler <span class="token operator">=</span> <span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> ?</code></pre>
+
+
+</section>
 						<section id="SimRequestHandler" class="doc-node">
 							<div class="title"><h2>type SimRequestHandler <a href="#SimRequestHandler">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimRequestHandler <span class="token operator">=</span> <span class="token keyword">fn</span> <span class="token punctuation">(</span>request SimRequest<span class="token punctuation">)</span> ?</code></pre>
+
+
+</section>
+						<section id="SimStartHandler" class="doc-node">
+							<div class="title"><h2>type SimStartHandler <a href="#SimStartHandler">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimStartHandler <span class="token operator">=</span> <span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> ?</code></pre>
 
 
 </section>
@@ -129,6 +139,17 @@
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
 	width  <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_width
 	height <span class="token builtin">int</span> <span class="token operator">=</span> sim<span class="token punctuation">.</span>default_height
+<span class="token punctuation">}</span></code></pre>
+
+
+</section>
+						<section id="RunnerSettings" class="doc-node">
+							<div class="title"><h2>struct RunnerSettings <a href="#RunnerSettings">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">RunnerSettings</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span><span class="token punctuation">:</span>
+	grid       GridSettings
+	on_request SimRequestHandler
+	on_start   SimStartHandler  <span class="token operator">=</span> <span class="token builtin">voidptr</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+	on_finish  SimFinishHandler <span class="token operator">=</span> <span class="token builtin">voidptr</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -278,7 +299,7 @@
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 14 Nov 2021 06:30:46
+							Powered by vdoc. Generated on: 22 Nov 2021 15:07:28
 						</div>
 					</div>
 					<div class="doc-toc"><ul><li class="open"><a href="#Constants">Constants</a></li>
@@ -306,10 +327,19 @@
 <li class="open"><a href="#vector">fn vector</a>        <ul>
 </ul>
 </li>
+<li class="open"><a href="#SimFinishHandler">type SimFinishHandler</a>        <ul>
+</ul>
+</li>
 <li class="open"><a href="#SimRequestHandler">type SimRequestHandler</a>        <ul>
 </ul>
 </li>
+<li class="open"><a href="#SimStartHandler">type SimStartHandler</a>        <ul>
+</ul>
+</li>
 <li class="open"><a href="#GridSettings">struct GridSettings</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#RunnerSettings">struct RunnerSettings</a>        <ul>
 </ul>
 </li>
 <li class="open"><a href="#SimParams">struct SimParams</a>        <ul>
