@@ -1,11 +1,17 @@
 module main
 
+import benchmark
 import sim
 import sim.args as simargs
 import sim.img
 
 fn main() {
 	args := simargs.parse_args(secuencial: true) ? as simargs.SecuencialArgs
+
+	mut bmark := benchmark.start()
+	defer {
+		bmark.measure(@FN)
+	}
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
 	defer {

@@ -1,5 +1,6 @@
 module main
 
+import benchmark
 import sim
 import sim.args as simargs
 import sim.img
@@ -9,13 +10,16 @@ fn main() {
 
 	request_chan := chan sim.SimRequest{}
 	result_chan := chan sim.SimResult{}
-
 	mut workers := []thread{cap: args.workers}
+
+	mut bmark := benchmark.start()
+
 	defer {
 		request_chan.close()
 		result_chan.close()
 		sim.log('Waiting for workers to finish')
 		workers.wait()
+		bmark.measure(@FN)
 	}
 
 	// start a worker on each core
