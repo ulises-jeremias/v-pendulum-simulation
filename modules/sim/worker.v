@@ -1,6 +1,7 @@
 module sim
 
 import math
+import benchmark
 
 const (
 	max_iterations     = 1000
@@ -23,15 +24,19 @@ pub:
 	id               u64
 }
 
-pub fn sim_worker(request_chan chan SimRequest, result_channels []chan SimResult) {
-	// serve sim requests as they come in
+pub fn sim_worker(id int, request_chan chan SimRequest, result_channels []chan SimResult) {
+	mut bmark := benchmark.new_benchmark()
 	for {
+		bmark.step()
 		request := <-request_chan or { break }
 		result := compute_result(request)
 		for ch in result_channels {
 			ch <- result
 		}
+		bmark.ok()
 	}
+	bmark.stop()
+	println(bmark.total_message(@FN + ': worker $id'))
 }
 
 pub fn compute_result(request SimRequest) SimResult {

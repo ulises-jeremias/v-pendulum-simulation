@@ -4,6 +4,10 @@ import term
 
 pub type SimRequestHandler = fn (request SimRequest) ?
 
+pub type SimStartHandler = fn () ?
+
+pub type SimFinishHandler = fn () ?
+
 pub const (
 	default_width  = 600
 	default_height = 600
@@ -22,9 +26,24 @@ pub fn new_grid_settings(settings GridSettings) GridSettings {
 	}
 }
 
-pub fn run(params SimParams, handle_request SimRequestHandler, grid_settings GridSettings) {
-	height := grid_settings.height
-	width := grid_settings.width
+[params]
+pub struct RunnerSettings {
+pub:
+	grid       GridSettings
+	on_request SimRequestHandler
+	on_start   SimStartHandler  = voidptr(0)
+	on_finish  SimFinishHandler = voidptr(0)
+}
+
+pub fn run(params SimParams, settings RunnerSettings) {
+	height := settings.grid.height
+	width := settings.grid.width
+
+	if !isnil(settings.on_start) {
+		settings.on_start() or {
+			log(@MOD + '.' + @FN + ': Simulation start handler failed. Error $err')
+		}
+	}
 
 	mut index := u64(0)
 	log('')
@@ -53,11 +72,17 @@ pub fn run(params SimParams, handle_request SimRequestHandler, grid_settings Gri
 				state: state
 				params: params
 			}
-			handle_request(request) or {
+			settings.on_request(request) or {
 				log(@MOD + '.' + @FN + ': request handler failed. Error $err')
 				break
 			}
 			index++
+		}
+	}
+
+	if !isnil(settings.on_finish) {
+		settings.on_finish() or {
+			log(@MOD + '.' + @FN + ': Simulation stop handler failed. Error $err')
 		}
 	}
 }

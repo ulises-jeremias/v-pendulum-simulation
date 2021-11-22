@@ -23,7 +23,7 @@ fn main() {
 		results[result.id] = result
 	}
 
-	sim.run(args.params, sim.SimRequestHandler(handle_request), args.grid)
+	sim.run(args.params, grid: args.grid, on_request: sim.SimRequestHandler(handle_request))
 
 	for result in results {
 		pixel := img.compute_pixel(result)
