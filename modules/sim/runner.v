@@ -1,5 +1,6 @@
 module sim
 
+import benchmark
 import term
 
 pub type SimRequestHandler = fn (request SimRequest) ?
@@ -47,12 +48,15 @@ pub fn run(params SimParams, settings RunnerSettings) {
 
 	mut index := u64(0)
 	log('')
+
+	mut bmark := benchmark.new_benchmark()
 	for y in 0 .. height {
 		$if verbose ? {
 			term.clear_previous_line()
 		}
 		log(@MOD + '.' + @FN + ': y: ${y + 1}')
 		for x in 0 .. width {
+			bmark.step()
 			// setup state conditions
 			position := vector(
 				x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
@@ -74,11 +78,15 @@ pub fn run(params SimParams, settings RunnerSettings) {
 			}
 			settings.on_request(request) or {
 				log(@MOD + '.' + @FN + ': request handler failed. Error $err')
+				bmark.fail()
 				break
 			}
 			index++
+			bmark.ok()
 		}
 	}
+	bmark.stop()
+	println(bmark.total_message(@FN))
 
 	if !isnil(settings.on_finish) {
 		settings.on_finish() or {

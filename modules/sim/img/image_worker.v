@@ -1,5 +1,6 @@
 module img
 
+import benchmark
 import gx
 import sim
 
@@ -19,6 +20,8 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan sim.SimResult, settin
 	mut pixel_buf := []ValidColor{len: total_pixels, init: ValidColor{
 		valid: false
 	}}
+
+	mut bmark := benchmark.new_benchmark()
 	for {
 		result := <-result_chan or { break }
 
@@ -27,10 +30,13 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan sim.SimResult, settin
 		pixel_buf[result.id].valid = true
 
 		for current_index < total_pixels && pixel_buf[current_index].valid {
+			bmark.step()
 			writer.handle_pixel(pixel_buf[current_index].Color) or {
+				bmark.fail()
 				sim.log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
 				break
 			}
+			bmark.ok()
 			current_index++
 		}
 
@@ -38,6 +44,9 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan sim.SimResult, settin
 			break
 		}
 	}
+	bmark.stop()
+	println(bmark.total_message(@FN))
+
 	writer.write() or { panic('Could not write image') }
 }
 
