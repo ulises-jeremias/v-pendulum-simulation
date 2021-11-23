@@ -13,7 +13,7 @@ fn main() {
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
 
-	mut workers := []thread{cap: args.workers}
+	mut workers := []thread{cap: args.workers + 1}
 	mut bmark := benchmark.start()
 
 	defer {
