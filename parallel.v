@@ -10,8 +10,10 @@ fn main() {
 
 	request_chan := chan sim.SimRequest{}
 	result_chan := chan sim.SimResult{}
-	mut workers := []thread{cap: args.workers}
 
+	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
+
+	mut workers := []thread{cap: args.workers}
 	mut bmark := benchmark.start()
 
 	defer {
@@ -19,24 +21,24 @@ fn main() {
 		result_chan.close()
 		sim.log('Waiting for workers to finish')
 		workers.wait()
+		sim.log('Workers finished!')
 		bmark.measure(@FN)
+		sim.log('Closing writer file')
+		writer.close()
 	}
 
-	// start a worker on each core
 	for id in 0 .. args.workers {
 		workers << go sim.sim_worker(id, request_chan, [result_chan])
 	}
+
+	workers << go img.image_worker(mut writer, result_chan, img.image_settings_from_grid(args.grid))
 
 	handle_request := fn [request_chan] (request sim.SimRequest) ? {
 		request_chan <- request
 	}
 
-	go sim.run(args.params, grid: args.grid, on_request: sim.SimRequestHandler(handle_request))
-
-	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
-	defer {
-		writer.close()
-	}
-
-	img.image_worker(mut writer, result_chan, img.image_settings_from_grid(args.grid))
+	sim.run(args.params,
+		grid: args.grid
+		on_request: sim.SimRequestHandler(handle_request)
+	)
 }
