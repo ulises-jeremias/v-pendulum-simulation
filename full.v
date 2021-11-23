@@ -17,6 +17,7 @@ fn main() {
 	mut bmark := benchmark.start()
 
 	img_result_chan := chan sim.SimResult{}
+
 	defer {
 		img_result_chan.close()
 		app.request_chan.close()
