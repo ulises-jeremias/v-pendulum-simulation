@@ -10,8 +10,9 @@ const max_parallel_workers = runtime.nr_jobs()
 
 [params]
 pub struct ParserSettings {
-	secuencial bool
-	img        bool
+	secuencial    bool
+	img           bool
+	extra_workers int
 }
 
 pub struct SecuencialArgs {
@@ -34,7 +35,7 @@ pub fn parse_args(config ParserSettings) ?SimArgs {
 		args := parse_secuencial_args() ?
 		return SimArgs(args)
 	} else {
-		args := parse_parallel_args() ?
+		args := parse_parallel_args(config.extra_workers) ?
 		return SimArgs(args)
 	}
 }
@@ -90,7 +91,7 @@ fn parse_secuencial_args() ?SecuencialArgs {
 	return args
 }
 
-fn parse_parallel_args() ?ParallelArgs {
+fn parse_parallel_args(extra_workers int) ?ParallelArgs {
 	mut fp := flag.new_flag_parser(os.args)
 	fp.application('vps')
 	fp.version('v0.1.0')
@@ -136,10 +137,18 @@ fn parse_parallel_args() ?ParallelArgs {
 		params: params
 		filename: filename
 		grid: grid
-		workers: workers
+		workers: get_workers(workers, extra_workers)
 	}
 
 	sim.log('$args')
 
 	return args
+}
+
+fn get_workers(workers int, extra_workers int) int {
+	if workers + extra_workers <= args.max_parallel_workers {
+		return workers
+	}
+
+	return args.max_parallel_workers - extra_workers
 }

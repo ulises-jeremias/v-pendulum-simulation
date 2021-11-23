@@ -6,7 +6,7 @@ import sim.args as simargs
 import sim.img
 
 fn main() {
-	args := simargs.parse_args() ? as simargs.ParallelArgs
+	args := simargs.parse_args(extra_workers: 1) ? as simargs.ParallelArgs
 
 	request_chan := chan sim.SimRequest{}
 	result_chan := chan sim.SimResult{}

@@ -27,8 +27,8 @@ pub:
 pub fn sim_worker(id int, request_chan chan SimRequest, result_channels []chan SimResult) {
 	mut bmark := benchmark.new_benchmark()
 	for {
-		bmark.step()
 		request := <-request_chan or { break }
+		bmark.step()
 		result := compute_result(request)
 		for ch in result_channels {
 			ch <- result

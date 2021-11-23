@@ -7,7 +7,7 @@ import sim.args as simargs
 import sim.img
 
 fn main() {
-	args := simargs.parse_args() ? as simargs.ParallelArgs
+	args := simargs.parse_args(extra_workers: 2) ? as simargs.ParallelArgs
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
 

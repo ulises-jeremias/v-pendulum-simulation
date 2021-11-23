@@ -39,10 +39,6 @@ pub fn image_worker(mut writer PPMWriter, result_chan chan sim.SimResult, settin
 			bmark.ok()
 			current_index++
 		}
-
-		if current_index >= total_pixels {
-			break
-		}
 	}
 	bmark.stop()
 	println(bmark.total_message(@FN))
