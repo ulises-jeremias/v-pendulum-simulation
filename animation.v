@@ -15,9 +15,9 @@ fn main() {
 
 	defer {
 		app.request_chan.close()
-		app.result_chan.close()
 		sim.log('Waiting for workers to finish')
 		workers.wait()
+		app.result_chan.close()
 		sim.log('Workers finished!')
 		bmark.measure(@FN)
 		sim.log('Done!')
