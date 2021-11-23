@@ -31,6 +31,7 @@ fn main() {
 		bmark.measure(@FN)
 		sim.log('Closing writer file')
 		writer.close()
+		sim.log('Done!')
 	}
 
 	// start a worker on each core

@@ -28,6 +28,7 @@ fn main() {
 		bmark.measure(@FN)
 		sim.log('Closing writer file')
 		writer.close()
+		sim.log('Done!')
 	}
 
 	for id in 0 .. args.workers {

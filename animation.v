@@ -20,6 +20,7 @@ fn main() {
 		workers.wait()
 		sim.log('Workers finished!')
 		bmark.measure(@FN)
+		sim.log('Done!')
 	}
 
 	for id in 0 .. args.workers {
