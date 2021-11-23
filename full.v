@@ -19,11 +19,14 @@ fn main() {
 	img_result_chan := chan sim.SimResult{}
 
 	defer {
-		img_result_chan.close()
+		image_worker := workers.pop()
 		app.request_chan.close()
-		app.result_chan.close()
 		sim.log('Waiting for workers to finish')
 		workers.wait()
+		app.result_chan.close()
+		img_result_chan.close()
+		sim.log('Waiting for image writer to finish')
+		image_worker.wait()
 		sim.log('Workers finished!')
 		bmark.measure(@FN)
 		sim.log('Closing writer file')

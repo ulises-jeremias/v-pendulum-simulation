@@ -17,10 +17,13 @@ fn main() {
 	mut bmark := benchmark.start()
 
 	defer {
+		image_worker := workers.pop()
 		request_chan.close()
-		result_chan.close()
 		sim.log('Waiting for workers to finish')
 		workers.wait()
+		result_chan.close()
+		sim.log('Waiting for image writer to finish')
+		image_worker.wait()
 		sim.log('Workers finished!')
 		bmark.measure(@FN)
 		sim.log('Closing writer file')
