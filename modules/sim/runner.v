@@ -32,8 +32,8 @@ pub struct RunnerSettings {
 pub:
 	grid       GridSettings
 	on_request SimRequestHandler
-	on_start   SimStartHandler  = voidptr(0)
-	on_finish  SimFinishHandler = voidptr(0)
+	on_start   SimStartHandler
+	on_finish  SimFinishHandler
 }
 
 pub fn run(params SimParams, settings RunnerSettings) {
@@ -46,7 +46,7 @@ pub fn run(params SimParams, settings RunnerSettings) {
 		}
 	}
 
-	mut index := u64(0)
+	mut index := 0
 	log('')
 
 	mut bmark := benchmark.new_benchmark()

@@ -12,16 +12,16 @@ pub struct SimRequest {
 	params SimParams
 	state  SimState
 pub:
-	id u64
+	id int
 }
 
 pub struct SimResult {
 	state SimState
 pub:
+	id               int
 	magnet1_distance f64
 	magnet2_distance f64
 	magnet3_distance f64
-	id               u64
 }
 
 pub fn sim_worker(id int, request_chan chan SimRequest, result_channels []chan SimResult) {
@@ -55,8 +55,10 @@ pub fn compute_result(request SimRequest) SimResult {
 	m2_dist := params.get_magnet_dist(2.0 * math.pi / 3.0, state)
 	m3_dist := params.get_magnet_dist(4.0 * math.pi / 3.0, state)
 
+	id := if request.id < 0 { 0 } else { request.id }
+
 	return SimResult{
-		id: request.id
+		id: id
 		state: state
 		magnet1_distance: m1_dist
 		magnet2_distance: m2_dist
