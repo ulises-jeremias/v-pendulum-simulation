@@ -81,7 +81,7 @@
 
 </section>
 						<section id="compute_result" class="doc-node">
-							<div class="title"><h2>fn compute_result <a href="#compute_result">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">compute_result</span><span class="token punctuation">(</span>request SimRequest<span class="token punctuation">)</span> SimResult</code></pre>
+							<div class="title"><h2>fn compute_result <a href="#compute_result">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">compute_result</span><span class="token punctuation">(</span>request SimRequest<span class="token punctuation">)</span> <span class="token operator">&</span>SimResult</code></pre>
 
 
 </section>
@@ -111,7 +111,7 @@
 
 </section>
 						<section id="sim_worker" class="doc-node">
-							<div class="title"><h2>fn sim_worker <a href="#sim_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_worker</span><span class="token punctuation">(</span>id <span class="token builtin">int</span><span class="token punctuation">,</span> request_chan <span class="token builtin">chan</span> SimRequest<span class="token punctuation">,</span> result_channels <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">chan</span> SimResult<span class="token punctuation">)</span></code></pre>
+							<div class="title"><h2>fn sim_worker <a href="#sim_worker">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sim_worker</span><span class="token punctuation">(</span>id <span class="token builtin">int</span><span class="token punctuation">,</span> request_chan <span class="token builtin">chan</span> <span class="token operator">&</span>SimRequest<span class="token punctuation">,</span> result_channels <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">chan</span> <span class="token operator">&</span>SimResult<span class="token punctuation">)</span></code></pre>
 
 
 </section>
@@ -126,7 +126,7 @@
 
 </section>
 						<section id="SimRequestHandler" class="doc-node">
-							<div class="title"><h2>type SimRequestHandler <a href="#SimRequestHandler">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimRequestHandler <span class="token operator">=</span> <span class="token keyword">fn</span> <span class="token punctuation">(</span>request SimRequest<span class="token punctuation">)</span> ?</code></pre>
+							<div class="title"><h2>type SimRequestHandler <a href="#SimRequestHandler">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimRequestHandler <span class="token operator">=</span> <span class="token keyword">fn</span> <span class="token punctuation">(</span>request <span class="token operator">&</span>SimRequest<span class="token punctuation">)</span> ?</code></pre>
 
 
 </section>
@@ -300,7 +300,7 @@
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 31 Dec 2021 19:37:40
+							Powered by vdoc. Generated on: 31 Dec 2021 20:27:48
 						</div>
 					</div>
 					<div class="doc-toc"><ul><li class="open"><a href="#Constants">Constants</a></li>
