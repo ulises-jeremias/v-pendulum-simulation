@@ -55,7 +55,7 @@ pub fn compute_result(request SimRequest) &SimResult {
 	m2_dist := params.get_magnet_dist(2.0 * math.pi / 3.0, state)
 	m3_dist := params.get_magnet_dist(4.0 * math.pi / 3.0, state)
 
-	id := if request.id < 0 { 0 } else { request.id }
+	id := request.id
 
 	return &SimResult{
 		id: id
