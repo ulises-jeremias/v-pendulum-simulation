@@ -24,7 +24,7 @@ pub:
 	magnet3_distance f64
 }
 
-pub fn sim_worker(id int, request_chan chan SimRequest, result_channels []chan SimResult) {
+pub fn sim_worker(id int, request_chan chan &SimRequest, result_channels []chan &SimResult) {
 	mut bmark := benchmark.new_benchmark()
 	for {
 		request := <-request_chan or { break }
@@ -39,7 +39,7 @@ pub fn sim_worker(id int, request_chan chan SimRequest, result_channels []chan S
 	println(bmark.total_message(@FN + ': worker $id'))
 }
 
-pub fn compute_result(request SimRequest) SimResult {
+pub fn compute_result(request SimRequest) &SimResult {
 	mut state := request.state
 	params := request.params
 
@@ -57,7 +57,7 @@ pub fn compute_result(request SimRequest) SimResult {
 
 	id := if request.id < 0 { 0 } else { request.id }
 
-	return SimResult{
+	return &SimResult{
 		id: id
 		state: state
 		magnet1_distance: m1_dist

@@ -8,8 +8,8 @@ import sim.img
 fn main() {
 	args := simargs.parse_args(extra_workers: 1) ? as simargs.ParallelArgs
 
-	request_chan := chan sim.SimRequest{}
-	result_chan := chan sim.SimResult{}
+	request_chan := chan &sim.SimRequest{}
+	result_chan := chan &sim.SimResult{}
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
 
@@ -37,7 +37,7 @@ fn main() {
 
 	workers << go img.image_worker(mut writer, result_chan, img.image_settings_from_grid(args.grid))
 
-	handle_request := fn [request_chan] (request sim.SimRequest) ? {
+	handle_request := fn [request_chan] (request &sim.SimRequest) ? {
 		request_chan <- request
 	}
 

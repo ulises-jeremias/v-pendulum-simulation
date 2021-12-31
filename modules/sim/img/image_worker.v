@@ -10,7 +10,7 @@ mut:
 	valid bool
 }
 
-pub fn image_worker(mut writer PPMWriter, result_chan chan sim.SimResult, settings ImageSettings) {
+pub fn image_worker(mut writer PPMWriter, result_chan chan &sim.SimResult, settings ImageSettings) {
 	width := settings.width
 	height := settings.height
 	total_pixels := width * height

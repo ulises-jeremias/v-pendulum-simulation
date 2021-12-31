@@ -22,9 +22,9 @@ fn main() {
 	width := args.grid.width
 	total_pixels := height * width
 
-	mut results := []sim.SimResult{len: total_pixels}
+	mut results := []&sim.SimResult{len: total_pixels}
 
-	handle_request := fn [mut results] (request sim.SimRequest) ? {
+	handle_request := fn [mut results] (request &sim.SimRequest) ? {
 		result := sim.compute_result(request)
 		results[result.id] = result
 	}

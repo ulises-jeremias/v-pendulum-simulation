@@ -3,7 +3,7 @@ module sim
 import benchmark
 import term
 
-pub type SimRequestHandler = fn (request SimRequest) ?
+pub type SimRequestHandler = fn (request &SimRequest) ?
 
 pub type SimStartHandler = fn () ?
 
@@ -71,7 +71,7 @@ pub fn run(params SimParams, settings RunnerSettings) {
 			)
 
 			state.satisfy_rope_constraint(params)
-			request := SimRequest{
+			request := &SimRequest{
 				id: index
 				state: state
 				params: params

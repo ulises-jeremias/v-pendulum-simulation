@@ -16,8 +16,8 @@ struct Pixel {
 struct App {
 pub:
 	args         simargs.ParallelArgs
-	request_chan chan sim.SimRequest
-	result_chan  chan sim.SimResult
+	request_chan chan &sim.SimRequest
+	result_chan  chan &sim.SimResult
 pub mut:
 	gg     &gg.Context = 0
 	iidx   int

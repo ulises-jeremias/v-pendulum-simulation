@@ -51,7 +51,7 @@ fn test_compute_result() {
 			z: 3.031649005909761e-11
 		)
 	}
-	expected := SimResult{
+	expected := &SimResult{
 		state: expected_state
 		id: 0
 		magnet1_distance: 0.07993696666249224

@@ -27,7 +27,7 @@ fn main() {
 		workers << go sim.sim_worker(id, app.request_chan, [app.result_chan])
 	}
 
-	handle_request := fn [app] (request sim.SimRequest) ? {
+	handle_request := fn [app] (request &sim.SimRequest) ? {
 		app.request_chan <- request
 	}
 
