@@ -22,6 +22,7 @@
 		<script src="dark-mode.js"></script>
 	</head>
 	<body>
+		<div><a id="skip-to-content-link" href="#main-content">Skip to content</a></div>
 		<div id="page">
 			<header class="doc-nav hidden">
 				<div class="heading-container">
@@ -47,7 +48,7 @@
 					</ul>
 				</nav>
 			</header>
-			<div class="doc-scrollview">
+			<div class="doc-scrollview" id="main-content">
 				<div class="doc-container">
 					<div class="doc-content">
 						<section id="readme_sim" class="doc-node">
@@ -148,8 +149,8 @@
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
 	grid       GridSettings
 	on_request SimRequestHandler
-	on_start   SimStartHandler  <span class="token operator">=</span> <span class="token builtin">voidptr</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-	on_finish  SimFinishHandler <span class="token operator">=</span> <span class="token builtin">voidptr</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+	on_start   SimStartHandler
+	on_finish  SimFinishHandler
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -221,7 +222,7 @@
 	params SimParams
 	state  SimState
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
-	id <span class="token builtin">u64</span>
+	id <span class="token builtin">int</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -230,10 +231,10 @@
 							<div class="title"><h2>struct SimResult <a href="#SimResult">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">SimResult</span> <span class="token punctuation">{</span>
 	state SimState
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
+	id               <span class="token builtin">int</span>
 	magnet1_distance <span class="token builtin">f64</span>
 	magnet2_distance <span class="token builtin">f64</span>
 	magnet3_distance <span class="token builtin">f64</span>
-	id               <span class="token builtin">u64</span>
 <span class="token punctuation">}</span></code></pre>
 
 
@@ -299,7 +300,7 @@
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 23 Nov 2021 02:04:35
+							Powered by vdoc. Generated on: 31 Dec 2021 19:35:09
 						</div>
 					</div>
 					<div class="doc-toc"><ul><li class="open"><a href="#Constants">Constants</a></li>
