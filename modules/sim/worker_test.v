@@ -30,7 +30,7 @@ const (
 
 fn test_compute_result() {
 	request := SimRequest{
-		id: u64(0)
+		id: 0
 		params: sim.worker_test_mock_params
 		state: sim.worker_test_mock_state
 	}
@@ -53,7 +53,7 @@ fn test_compute_result() {
 	}
 	expected := SimResult{
 		state: expected_state
-		id: u64(0)
+		id: 0
 		magnet1_distance: 0.07993696666249224
 		magnet2_distance: 0.07993696666249223
 		magnet3_distance: 0.03609361938278009
