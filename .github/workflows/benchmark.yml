@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         flags:
-          - "--width=200 --height=200"
-          - "--width=400 --height=400"
+          - "--use-prod --use-gc=boehm --width=200 --height=200"
+          - "--use-prod --use-gc=boehm --width=400 --height=400"
 
     steps:
     - name: Checkout Latest V
