@@ -31,7 +31,5 @@ jobs:
         sudo ./v symlink
     - name: V doctor
       run: v doctor
-    - name: Install Dependencies
-      run: sudo pacman -S --noconfirm gc
     - name: Execute Tests
       run: ./v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
