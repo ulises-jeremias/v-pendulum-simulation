@@ -33,4 +33,6 @@ jobs:
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
     - name: Execute Tests
-      run: ~/.vmodules/v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
+      run: |
+        cd ~/.vmodules/v-pendulum-simulation
+        ./bin/run-benchmark-test ${{ matrix.flags }}

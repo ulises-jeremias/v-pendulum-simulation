@@ -23,7 +23,7 @@ source "${ROOT}/util/logs.sh" || exit
 
 set -eo pipefail
 
-pensim_dir_path=$(dirname $(dirname "$0"))
+pensim_dir_path=$(dirname "${ROOT}")
 
 height="${height:-600}"
 width="${width:-600}"
@@ -37,7 +37,7 @@ fi
 
 if [[ -n "${use_prod}" ]]; then
     echo "Running tests using prod mode"
-    flags="${flasg} -prod"
+    flags="${flags} -prod"
 fi
 
 if [[ -n "${use_gc}" ]]; then
