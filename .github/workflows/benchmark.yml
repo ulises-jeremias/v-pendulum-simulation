@@ -32,7 +32,7 @@ jobs:
     - name: V doctor
       run: v doctor
     - name: Install Dependencies
-      run: sudo pacman -S --noconfirm libgc-dev
+      run: sudo pacman -S --noconfirm gc
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
     - name: Execute Tests
