@@ -9,13 +9,13 @@ jobs:
   ubuntu:
     runs-on: ubuntu-latest
 
-  strategy:
-    matrix:
-      flags:
-        - "--width=200 --height=200"
-        - "--wtdth=400 --height=400"
+    strategy:
+      matrix:
+        flags:
+          - "--width=200 --height=200"
+          - "--wtdth=400 --height=400"
 
-  steps:
+    steps:
     - name: Checkout Latest V
       uses: actions/checkout@v2
       with:
