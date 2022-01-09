@@ -55,8 +55,8 @@ if [[ -n "${stats}" ]]; then
     flags="${flags} -stats"
 fi
 
-secuencial_output_path=$(slugify "output_${flags}_${height}x${width}.ppm")
-parallel_output_path=$(slugify "output_${flags}_${height}x${width}_${workers}.ppm")
+secuencial_output_path="$(slugify "output_${flags}_${height}x${width}").ppm"
+parallel_output_path="$(slugify "output_${flags}_${height}x${width}_${workers}").ppm"
 
 echo "Compiling secuencial simulation with flags: \"${flags}\""
 
