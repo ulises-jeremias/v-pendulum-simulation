@@ -39,7 +39,7 @@ execution_flags="--width ${width} --height ${height}"
 
 if [[ -n "${use_verbose}" ]]; then
     echo "Running tests in verbose mode"
-    flags="${flags} -verbose"
+    flags="${flags} -d verbose"
 fi
 
 if [[ -n "${use_autofree}" ]]; then
