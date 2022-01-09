@@ -55,14 +55,14 @@ echo "Compiling secuencial simulation with flags: \"${flags}\""
 
 v ${flags} "${pensim_dir_path}"/secuencial.v
 
-echo "Executing secuencial simulation flags \"--width=${width} --height=${height}\"..."
+echo "Executing secuencial simulation flags \"--width ${width} --height ${height}\"..."
 
-"${pensim_dir_path}"/secuencial --width="${width}" --height="${height}"
+"${pensim_dir_path}"/secuencial --width "${width}" --height "${height}"
 
 echo "Compiling parallel simulation with flags: \"${flags}\""
 
 v ${flags} "${pensim_dir}"/parallel.v
 
-echo "Executing parallel simulation with flags \"--workers=${workers} --width=${width} --height=${height}\"..."
+echo "Executing parallel simulation with flags \"--workers ${workers} --width ${width} --height ${height}\"..."
 
-"${pensim_dir_path}"/parallel --workers="${workers}" --width="${width}" --height="${height}"
+"${pensim_dir_path}"/parallel --workers "${workers}" --width "${width}" --height "${height}"
