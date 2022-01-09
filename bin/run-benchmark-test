@@ -33,6 +33,7 @@ height="${height:-600}"
 width="${width:-600}"
 
 flags=""
+execution_flags="--width ${width} --height ${height}"
 
 if [[ -n "${use_autofree}" ]]; then
     echo "Running tests using Autofree"
@@ -62,14 +63,18 @@ echo "Compiling secuencial simulation with flags: \"${flags}\""
 
 v ${flags} "${pensim_dir_path}"/secuencial.v
 
-echo "Executing secuencial simulation flags \"--width ${width} --height ${height} --output ${secuencial_output_path}\"..."
+echo "Executing secuencial simulation flags \"${execution_flags} --output ${secuencial_output_path}\"..."
 
-"${pensim_dir_path}"/secuencial --width "${width}" --height "${height}" --output "${secuencial_output_path}"
+"${pensim_dir_path}"/secuencial ${execution_flags} --output "${secuencial_output_path}"
+
+if [[ -n "${workers}" ]]; then
+    execution_flags="${execution_flags} --workers ${workers}"
+fi
 
 echo "Compiling parallel simulation with flags: \"${flags}\""
 
 v ${flags} "${pensim_dir_path}"/parallel.v
 
-echo "Executing parallel simulation with flags \"--workers ${workers} --width ${width} --height ${height} --output ${parallel_output_path}\"..."
+echo "Executing parallel simulation with flags \"${execution_flags} --output ${parallel_output_path}\"..."
 
-"${pensim_dir_path}"/parallel --workers "${workers}" --width "${width}" --height "${height}" --output "${parallel_output_path}"
+"${pensim_dir_path}"/parallel ${execution_flags} --output "${parallel_output_path}"
