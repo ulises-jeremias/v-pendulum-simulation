@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+## Copyright (C) 2021 Ulises Jeremias Cornejo Fandos
+## Licensed under MIT
+##
+##     @script.name [OPTION] ARGUMENTS...
+##
+## Options:
+##     -h, --help                            Prints usage and example
+##         --stats                           Exeute with stats
+##         --use-autofree                    Execute tests using atofree
+##         --use-prod                        Execute tests using prod mode compilation
+##         --use-gc=GC_STRATEGY              Execute tests using gc
+##         --width=WIDTH                     Grid width. 600 by default.
+##         --height=HEIGHT                   Grid height. 600 by default.
+##         --workers=NUM_WORKERS             Amount of workers to use for parallel simulation. Will use the amount of threads by default.
+##
+
+ROOT=$(dirname "$0")
+
+source "${ROOT}/util/opts/opts.sh" || exit
+source "${ROOT}/util/logs.sh" || exit
+
+set -eo pipefail
+
+pensim_dir_path=$(dirname $(dirname "$0"))
+
+height="${height:-600}"
+width="${width:-600}"
+
+flags=""
+
+if [[ -n "${use_autofree}" ]]; then
+    echo "Running tests using Autofree"
+    flags="${flags} -autofree"
+fi
+
+if [[ -n "${use_prod}" ]]; then
+    echo "Running tests using prod mode"
+    flags="${flasg} -prod"
+fi
+
+if [[ -n "${use_gc}" ]]; then
+    echo "Running tests using gc"
+    flags="${flags} -gc ${use_gc:-boehm}"
+fi
+
+
+if [[ -n "${stats}" ]]; then
+    echo "Running tests with stats"
+    flags="${flags} -stats"
+fi
+
+echo "Compiling secuencial simulation with flags: \"${flags}\""
+
+v ${flags} "${pensim_dir_path}"/secuencial.v
+
+echo "Executting secuencial simulation..."
+
+"${pensim_dir_path}"/secuencial --width="${width}" --height="${height}"
+
+echo "Compiling parallel simulation with flags: \"${flags}\""
+
+v ${flags} "${pensim_dir}"/parallel.v
+
+echo "Executting parallel simulation..."
+
+"${pensim_dir_path}"/parallel --workers="${workers}" --width="${width}" --height="${height}"

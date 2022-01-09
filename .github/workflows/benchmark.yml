@@ -1,12 +1,21 @@
-name: Periodic Check
+name: Build and Execute Benchmark tests
+
 on:
-  schedule:
-    - cron:  '31 1,12 * * *'
+  push:
+    branches:
+      - main
 
 jobs:
   ubuntu:
     runs-on: ubuntu-latest
-    steps:
+
+  strategy:
+    matrix:
+      flags:
+        - "--width=200 --height=200"
+        - "--wtdth=400 --height=400"
+
+  steps:
     - name: Checkout Latest V
       uses: actions/checkout@v2
       with:
@@ -24,4 +33,4 @@ jobs:
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
     - name: Execute Tests
-      run: v test ~/.vmodules/v-pendulum-simulation
+      run: ~/.vmodules/v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
