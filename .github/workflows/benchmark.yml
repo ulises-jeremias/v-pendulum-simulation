@@ -1,7 +1,7 @@
 name: Build and Execute Benchmark tests
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - main
 
@@ -32,7 +32,7 @@ jobs:
     - name: V doctor
       run: v doctor
     - name: Install Dependencies
-      run: sudo apt install --quiet -y --no-install-recommends libgc-dev
+      run: sudo pacman -S --noconfirm libgc-dev
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
     - name: Execute Tests
