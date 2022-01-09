@@ -4,6 +4,7 @@ import flag
 import os
 import runtime
 import sim
+import math
 
 // customisable through setting VJOBS
 const max_parallel_workers = runtime.nr_jobs()
@@ -145,10 +146,13 @@ fn parse_parallel_args(extra_workers int) ?ParallelArgs {
 	return args
 }
 
+[inline]
 fn get_workers(workers int, extra_workers int) int {
-	if workers + extra_workers <= args.max_parallel_workers {
-		return workers
+	result := if workers + extra_workers <= args.max_parallel_workers {
+		workers
+	} else {
+		args.max_parallel_workers - extra_workers
 	}
 
-	return args.max_parallel_workers - extra_workers
+	return math.max(1, result)
 }
