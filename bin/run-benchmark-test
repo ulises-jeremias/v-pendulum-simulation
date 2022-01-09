@@ -23,6 +23,10 @@ source "${ROOT}/util/logs.sh" || exit
 
 set -eo pipefail
 
+slugify () {
+    echo "$1" | iconv -c -t ascii//TRANSLIT | sed -E 's/[~^]+//g' | sed -E 's/[^a-zA-Z0-9]+/-/g' | sed -E 's/^-+|-+$//g' | tr "[:upper:]" "[:lower:]"
+}
+
 pensim_dir_path=$(dirname "${ROOT}")
 
 height="${height:-600}"
@@ -51,18 +55,21 @@ if [[ -n "${stats}" ]]; then
     flags="${flags} -stats"
 fi
 
+secuencial_output_path=$(slugify "output_${flags}_${height}x${width}.ppm")
+parallel_output_path=$(slugify "output_${flags}_${height}x${width}_${workers}.ppm")
+
 echo "Compiling secuencial simulation with flags: \"${flags}\""
 
 v ${flags} "${pensim_dir_path}"/secuencial.v
 
-echo "Executing secuencial simulation flags \"--width ${width} --height ${height}\"..."
+echo "Executing secuencial simulation flags \"--width ${width} --height ${height} --output ${secuencial_output_path}\"..."
 
-"${pensim_dir_path}"/secuencial --width "${width}" --height "${height}"
+"${pensim_dir_path}"/secuencial --width "${width}" --height "${height}" --output "${secuencial_output_path}"
 
 echo "Compiling parallel simulation with flags: \"${flags}\""
 
 v ${flags} "${pensim_dir_path}"/parallel.v
 
-echo "Executing parallel simulation with flags \"--workers ${workers} --width ${width} --height ${height}\"..."
+echo "Executing parallel simulation with flags \"--workers ${workers} --width ${width} --height ${height} --output ${parallel_output_path}\"..."
 
-"${pensim_dir_path}"/parallel --workers "${workers}" --width "${width}" --height "${height}"
+"${pensim_dir_path}"/parallel --workers "${workers}" --width "${width}" --height "${height}" --output "${parallel_output_path}"
