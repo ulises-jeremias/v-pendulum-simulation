@@ -8,7 +8,9 @@
 ## Options:
 ##     -h, --help                            Prints usage and example
 ##         --stats                           Exeute with stats
+##         --use-verbose                     Compile in verbose mode
 ##         --use-autofree                    Execute tests using atofree
+##         --use-prod                        Execute tests using prod mode compilation
 ##         --use-prod                        Execute tests using prod mode compilation
 ##         --use-gc=GC_STRATEGY              Execute tests using gc
 ##         --width=WIDTH                     Grid width. 600 by default.
@@ -34,6 +36,11 @@ width="${width:-600}"
 
 flags=""
 execution_flags="--width ${width} --height ${height}"
+
+if [[ -n "${use_verbose}" ]]; then
+    echo "Running tests in verbose mode"
+    flags="${flags} -verbose"
+fi
 
 if [[ -n "${use_autofree}" ]]; then
     echo "Running tests using Autofree"
