@@ -30,6 +30,8 @@ jobs:
         sudo ./v symlink
     - name: V doctor
       run: v doctor
+    - name: Install Dependencies
+      run: sudo apt install --quiet -y --no-install-recommends libgc-dev
     - name: Move Pendulum Simulation source code to V Modules
       run: mv ./v-pendulum-simulation ~/.vmodules
     - name: Execute Tests
