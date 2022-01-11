@@ -46,4 +46,4 @@ jobs:
       with:
         name: logs
         path: |
-          ./v-pendulum-simulation/**/*.log
+          ./**/simulation_log_*.log
