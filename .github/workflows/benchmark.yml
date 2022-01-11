@@ -45,4 +45,5 @@ jobs:
       if: success()
       with:
         name: logs
-        path: ./v-pendulum-simulation/*.log
+        path: |
+          ./v-pendulum-simulation/**/*.log
