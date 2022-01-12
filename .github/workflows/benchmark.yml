@@ -41,7 +41,7 @@ jobs:
       run: ./v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
 
     - name: Create artifact with execution logs
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: success()
       with:
         name: logs
