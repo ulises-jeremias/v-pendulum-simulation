@@ -5,21 +5,21 @@ jobs:
   ubuntu:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Latest V
-      uses: actions/checkout@v2
-      with:
-        repository: vlang/v
-    - name: Checkout Pendulum Simulation
-      uses: actions/checkout@v2
-      with:
-        path: v-pendulum-simulation
-    - name: Build V
-      run: |
-        make
-        sudo ./v symlink
-    - name: V doctor
-      run: v doctor
-    - name: Move Pendulum Simulation source code to V Modules
-      run: mv ./v-pendulum-simulation ~/.vmodules
-    - name: Execute Tests
-      run: v test ~/.vmodules/v-pendulum-simulation
+      - name: Checkout Latest V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+      - name: Checkout Pendulum Simulation
+        uses: actions/checkout@v2
+        with:
+          path: v-pendulum-simulation
+      - name: Build V
+        run: |
+          make
+          sudo ./v symlink
+      - name: V doctor
+        run: v doctor
+      - name: Move Pendulum Simulation source code to V Modules
+        run: mv ./v-pendulum-simulation ~/.vmodules
+      - name: Execute Tests
+        run: v test ~/.vmodules/v-pendulum-simulation
