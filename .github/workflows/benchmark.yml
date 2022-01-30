@@ -13,11 +13,6 @@ jobs:
       max-parallel: 1
       matrix:
         flags:
-          - "--use-prod --width=200 --height=200"
-          - "--use-prod --width=400 --height=400"
-          - "--use-prod --width=600 --height=600"
-          - "--use-prod --width=800 --height=800"
-          - "--use-prod --width=1000 --height=1000"
           - "--use-prod --use-gc=boehm --width=200 --height=200"
           - "--use-prod --use-gc=boehm --width=400 --height=400"
           - "--use-prod --use-gc=boehm --width=600 --height=600"
