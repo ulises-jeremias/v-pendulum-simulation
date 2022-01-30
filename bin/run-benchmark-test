@@ -7,6 +7,7 @@
 ##
 ## Options:
 ##     -h, --help                            Prints usage and example
+##         --times=TIMES                     Number of times to run the benchmark
 ##         --stats                           Exeute with stats
 ##         --use-verbose                     Compile in verbose mode
 ##         --use-autofree                    Execute tests using atofree
@@ -26,19 +27,11 @@ source "${ROOT}/util/logs.sh" || exit
 
 set -eo pipefail
 
-slugify () {
+slugify() {
     echo "$1" | iconv -c -t ascii//TRANSLIT | sed -E 's/[~^]+//g' | sed -E 's/[^a-zA-Z0-9]+/-/g' | sed -E 's/^-+|-+$//g' | tr "[:upper:]" "[:lower:]"
 }
 
 pensim_dir_path=$(dirname "${ROOT}")
-
-#==========================================
-# Default argument values and preprocessing
-#==========================================
-time_str=$(date +'%m-%d-%y_%H%M%S')
-log_file=${log_file:-"${pensim_dir_path}/simulation_log_$time_str.log"}
-
-[ ! -f "${log_file}" ] && touch "${log_file}"
 
 height="${height:-600}"
 width="${width:-600}"
@@ -66,24 +59,33 @@ if [[ -n "${stats}" ]]; then
     flags="${flags} -stats"
 fi
 
+log_file=${log_file:-"${pensim_dir_path}/simulation_log_$(slugify "${flags}_${height}x${width}").log"}
+
+[ ! -f "${log_file}" ] && touch "${log_file}"
+
 secuencial_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}").ppm"
 parallel_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}_${workers}").ppm"
 
 describe "Compiling secuencial simulation with flags: \"${flags}\""
 
-if v ${flags} "${pensim_dir_path}"/secuencial.v &>> "${log_file}"; then
+if v ${flags} "${pensim_dir_path}"/secuencial.v &>>"${log_file}"; then
     log_success "Compilation passed successfully" "" "${log_file}"
 else
     log_failed "Compilation failed" "I" "${log_file}"
 fi
 
-describe "Executing secuencial simulation with flags \"${execution_flags} --output ${secuencial_output_path}\""
+for i in $(seq 1 ${times}); do
+    describe "Executing secuencial simulation with flags \"${execution_flags} --output ${secuencial_output_path}\""
 
-if "${pensim_dir_path}"/secuencial ${execution_flags} --output "${secuencial_output_path}" &>> "${log_file}"; then
-    log_success "Secuencial Simulation passed successfully" "" "${log_file}"
-else
-    log_failed "Secuencial Execution failed" "" "${log_file}"
-fi
+    echo &>>"${log_file}"
+    echo &>>"${log_file}"
+
+    if "${pensim_dir_path}"/secuencial ${execution_flags} --output "${secuencial_output_path}" &>>"${log_file}"; then
+        log_success "Secuencial Simulation passed successfully" "" "${log_file}"
+    else
+        log_failed "Secuencial Execution failed" "" "${log_file}"
+    fi
+done
 
 describe "Compiling parallel simulation with flags: \"${flags}\""
 
@@ -92,7 +94,7 @@ if [[ -n "${use_gc}" ]]; then
     flags="${flags} -gc ${use_gc:-boehm}"
 fi
 
-if v ${flags} "${pensim_dir_path}"/parallel.v &>> "${log_file}"; then
+if v ${flags} "${pensim_dir_path}"/parallel.v &>>"${log_file}"; then
     log_success "Compilation passed successfully" "" "${log_file}"
 else
     log_failed "Compilation failed" "" "${log_file}"
@@ -103,10 +105,15 @@ if [[ -n "${workers}" ]]; then
     execution_flags="${execution_flags} --workers ${workers}"
 fi
 
-describe "Executing parallel simulation with flags \"${execution_flags} --output ${parallel_output_path}\""
+for i in $(seq 1 ${times}); do
+    describe "Executing parallel simulation with flags \"${execution_flags} --output ${parallel_output_path}\""
 
-if "${pensim_dir_path}"/parallel ${execution_flags} --output "${parallel_output_path}" &>> "${log_file}"; then
-    log_success "Parallel Simulation passed successfully" "" "${log_file}"
-else
-    log_failed "Parallel Execution failed" "" "${log_file}"
-fi
+    echo &>>"${log_file}"
+    echo &>>"${log_file}"
+
+    if "${pensim_dir_path}"/parallel ${execution_flags} --output "${parallel_output_path}" &>>"${log_file}"; then
+        log_success "Parallel Simulation passed successfully" "" "${log_file}"
+    else
+        log_failed "Parallel Execution failed" "" "${log_file}"
+    fi
+done

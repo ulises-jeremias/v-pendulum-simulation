@@ -13,37 +13,37 @@ jobs:
       max-parallel: 1
       matrix:
         flags:
-          - "--use-prod --use-gc=boehm --width=200 --height=200"
-          - "--use-prod --use-gc=boehm --width=400 --height=400"
-          - "--use-prod --use-gc=boehm --width=600 --height=600"
-          - "--use-prod --use-gc=boehm --width=800 --height=800"
-          - "--use-prod --use-gc=boehm --width=1000 --height=1000"
+          - "--use-prod --use-gc=boehm --times=5 --width=200 --height=200"
+          - "--use-prod --use-gc=boehm --times=5 --width=400 --height=400"
+          - "--use-prod --use-gc=boehm --times=5 --width=600 --height=600"
+          - "--use-prod --use-gc=boehm --times=5 --width=800 --height=800"
+          - "--use-prod --use-gc=boehm --times=5 --width=1000 --height=1000"
 
     steps:
-    - name: Checkout Latest V
-      uses: actions/checkout@v2
-      with:
-        repository: vlang/v
+      - name: Checkout Latest V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
 
-    - name: Checkout Pendulum Simulation
-      uses: actions/checkout@v2
-      with:
-        path: v-pendulum-simulation
+      - name: Checkout Pendulum Simulation
+        uses: actions/checkout@v2
+        with:
+          path: v-pendulum-simulation
 
-    - name: Build and Install V
-      run: |
-        make
-        sudo ./v symlink
+      - name: Build and Install V
+        run: |
+          make
+          sudo ./v symlink
 
-    - name: V doctor
-      run: v doctor
+      - name: V doctor
+        run: v doctor
 
-    - name: Execute Tests
-      run: ./v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
+      - name: Execute Tests with Flags ${{ matrix.flags }} 5 times
+        run: ./v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
 
-    - name: Create artifact with execution logs
-      uses: actions/upload-artifact@v2
-      if: success()
-      with:
-        name: logs
-        path: ./v-pendulum-simulation/simulation_log_*.log
+      - name: Create artifact with execution logs
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: logs
+          path: ./v-pendulum-simulation/simulation_log_*.log
