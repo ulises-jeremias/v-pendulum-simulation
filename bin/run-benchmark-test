@@ -35,7 +35,7 @@ pensim_dir_path=$(dirname "${ROOT}")
 #==========================================
 # Default argument values and preprocessing
 #==========================================
-time_str=$(date +'%m-%d-%y_%H:%M:%S')
+time_str=$(date +'%m-%d-%y_%H%M%S')
 log_file=${log_file:-"${pensim_dir_path}/simulation_log_$time_str.log"}
 
 [ ! -f "${log_file}" ] && touch "${log_file}"
