@@ -61,12 +61,6 @@ if [[ -n "${use_prod}" ]]; then
     flags="${flags} -prod"
 fi
 
-if [[ -n "${use_gc}" ]]; then
-    describe "Running tests using gc"
-    flags="${flags} -gc ${use_gc:-boehm}"
-fi
-
-
 if [[ -n "${stats}" ]]; then
     describe "Running tests with stats"
     flags="${flags} -stats"
@@ -93,6 +87,11 @@ fi
 
 describe "Compiling parallel simulation with flags: \"${flags}\""
 
+if [[ -n "${use_gc}" ]]; then
+    describe "Compiling tests using gc ${use_gc:-boehm}"
+    flags="${flags} -gc ${use_gc:-boehm}"
+fi
+
 if v ${flags} "${pensim_dir_path}"/parallel.v &>> "${log_file}"; then
     log_success "Compilation passed successfully" "" "${log_file}"
 else
@@ -101,7 +100,7 @@ fi
 
 if [[ -n "${workers}" ]]; then
     log_warn "Entered workers amount #${workers}" "" "${log_file}"
-
+    execution_flags="${execution_flags} --workers ${workers}"
 fi
 
 describe "Executing parallel simulation with flags \"${execution_flags} --output ${parallel_output_path}\""
