@@ -40,6 +40,9 @@ run_test() {
 
     describe "Compiling ${program} simulation with flags: \"${flags}\""
 
+    echo &>>"${log_file}"
+    echo &>>"${log_file}"
+
     if v ${flags} "${pensim_dir_path}"/"${program}".v &>>"${log_file}"; then
         log_success "Compilation passed successfully" "" "${log_file}"
     else
