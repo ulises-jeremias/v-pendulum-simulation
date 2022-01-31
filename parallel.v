@@ -18,8 +18,9 @@ fn main() {
 	result_chan := chan &sim.SimResult{cap: total_pixels}
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img_settings) ?
+	mut image_writer := img.new_image_writer(mut writer, img_settings)
 
-	mut workers := []thread{cap: args.workers + 1}
+	mut workers := []thread{cap: args.workers}
 	mut bmark := benchmark.start()
 
 	defer {
@@ -41,11 +42,6 @@ fn main() {
 	mut x := 0
 	mut y := 0
 	mut request_index := 0
-
-	mut result_index := u64(0)
-	mut pixel_buf := []img.ValidColor{len: total_pixels, init: img.ValidColor{
-		valid: false
-	}}
 
 	for {
 		// setup state conditions
@@ -69,25 +65,10 @@ fn main() {
 		}
 		select {
 			result := <-result_chan {
-				// find the closest magnet
-				pixel_buf[result.id].Color = img.compute_pixel(result)
-				pixel_buf[result.id].valid = true
-
-				for result_index < total_pixels && pixel_buf[result_index].valid {
-					writer.handle_pixel(pixel_buf[result_index].Color) or {
-						sim.log('Pixel handler failed. Error $err')
-						break
-					}
-					result_index++
-				}
-
-				if result_index == total_pixels - 1 {
-					sim.log('All pixels computed')
-					break
-				}
+				image_writer.handle(result) or { break }
 			}
 			else {
-				if request_index == total_pixels - 1 {
+				if request.id == total_pixels {
 					continue
 				}
 				request_chan <- request
@@ -95,6 +76,7 @@ fn main() {
 				if x == width {
 					x = 0
 					y++
+					sim.log('y: ${y + 1}')
 				}
 				request_index++
 			}

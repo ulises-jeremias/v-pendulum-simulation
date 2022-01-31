@@ -10,6 +10,49 @@ pub mut:
 	valid bool
 }
 
+pub struct ImageWritter {
+	settings ImageSettings
+pub mut:
+	writer        PPMWriter
+	current_index int
+	buffer        []ValidColor
+}
+
+pub fn new_image_writer(mut writer PPMWriter, settings ImageSettings) &ImageWritter {
+	total_pixels := settings.width * settings.height
+	mut buffer := []ValidColor{len: total_pixels, init: ValidColor{
+		valid: false
+	}}
+	return &ImageWritter{
+		writer: writer
+		settings: settings
+		buffer: buffer
+	}
+}
+
+pub fn (mut iw ImageWritter) handle(result sim.SimResult) ?int {
+	total_pixels := iw.settings.width * iw.settings.height
+
+	// find the closest magnet
+	iw.buffer[result.id].Color = compute_pixel(result)
+	iw.buffer[result.id].valid = true
+
+	for iw.current_index < total_pixels && iw.buffer[iw.current_index].valid {
+		iw.writer.handle_pixel(iw.buffer[iw.current_index].Color) or {
+			sim.log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
+			break
+		}
+		iw.current_index++
+	}
+
+	if iw.current_index == total_pixels {
+		iw.writer.write() or { panic('Could not write image') }
+		return none
+	}
+
+	return iw.current_index
+}
+
 pub fn image_worker(mut writer PPMWriter, result_chan chan &sim.SimResult, settings ImageSettings) {
 	width := settings.width
 	height := settings.height
