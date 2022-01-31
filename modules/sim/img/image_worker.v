@@ -4,9 +4,9 @@ import benchmark
 import gx
 import sim
 
-struct ValidColor {
+pub struct ValidColor {
 	gx.Color
-mut:
+pub mut:
 	valid bool
 }
 

@@ -11,6 +11,7 @@ fns.txt
 *.ppm
 main
 parallel
+parallel_with_iw
 secuencial
 animation
 full

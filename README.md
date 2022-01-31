@@ -32,6 +32,13 @@ $ v -gc boehm -prod parallel.v
 $ ./parallel # execute ./parallel -h for more info
 ```
 
+- Parallel Simulation with Image Worker
+
+```sh
+$ v -gc boehm -prod parallel_with_iw.v
+$ ./parallel_with_iw # execute ./parallel_with_iw -h for more info
+```
+
 - Parallel Simulation with Graphic User Interface
 
 ```sh

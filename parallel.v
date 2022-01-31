@@ -6,25 +6,28 @@ import sim.args as simargs
 import sim.img
 
 fn main() {
-	args := simargs.parse_args(extra_workers: 1) ? as simargs.ParallelArgs
+	args := simargs.parse_args() ? as simargs.ParallelArgs
 
-	request_chan := chan &sim.SimRequest{}
-	result_chan := chan &sim.SimResult{}
+	img_settings := img.image_settings_from_grid(args.grid)
 
-	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
+	width := img_settings.width
+	height := img_settings.height
+	total_pixels := width * height
+
+	request_chan := chan &sim.SimRequest{cap: total_pixels}
+	result_chan := chan &sim.SimResult{cap: total_pixels}
+
+	mut writer := img.ppm_writer_for_fname(args.filename, img_settings) ?
 
 	mut workers := []thread{cap: args.workers + 1}
 	mut bmark := benchmark.start()
 
 	defer {
-		image_worker := workers.pop()
 		request_chan.close()
 		sim.log('Waiting for workers to finish')
 		workers.wait()
 		result_chan.close()
 		sim.log('Waiting for image writer to finish')
-		image_worker.wait()
-		sim.log('Workers finished!')
 		bmark.measure(@FN)
 		sim.log('Closing writer file')
 		writer.close()
@@ -35,14 +38,66 @@ fn main() {
 		workers << go sim.sim_worker(id, request_chan, [result_chan])
 	}
 
-	workers << go img.image_worker(mut writer, result_chan, img.image_settings_from_grid(args.grid))
+	mut x := 0
+	mut y := 0
+	mut request_index := 0
 
-	handle_request := fn [request_chan] (request &sim.SimRequest) ? {
-		request_chan <- request
+	mut result_index := u64(0)
+	mut pixel_buf := []img.ValidColor{len: total_pixels, init: img.ValidColor{
+		valid: false
+	}}
+
+	for {
+		// setup state conditions
+		position := sim.vector(
+			x: 0.1 * ((f64(x) - 0.5 * f64(width - 1)) / f64(width - 1))
+			y: 0.1 * ((f64(y) - 0.5 * f64(height - 1)) / f64(height - 1))
+			z: 0.0
+		)
+		velocity := sim.vector(x: 0, y: 0, z: 0)
+
+		mut state := sim.new_state(
+			position: position
+			velocity: velocity
+		)
+
+		state.satisfy_rope_constraint(args.params)
+		request := &sim.SimRequest{
+			id: request_index
+			state: state
+			params: args.params
+		}
+		select {
+			result := <-result_chan {
+				// find the closest magnet
+				pixel_buf[result.id].Color = img.compute_pixel(result)
+				pixel_buf[result.id].valid = true
+
+				for result_index < total_pixels && pixel_buf[result_index].valid {
+					writer.handle_pixel(pixel_buf[result_index].Color) or {
+						sim.log('Pixel handler failed. Error $err')
+						break
+					}
+					result_index++
+				}
+
+				if result_index == total_pixels - 1 {
+					sim.log('All pixels computed')
+					break
+				}
+			}
+			else {
+				if request_index == total_pixels - 1 {
+					continue
+				}
+				request_chan <- request
+				x++
+				if x == width {
+					x = 0
+					y++
+				}
+				request_index++
+			}
+		}
 	}
-
-	sim.run(args.params,
-		grid: args.grid
-		on_request: sim.SimRequestHandler(handle_request)
-	)
 }
