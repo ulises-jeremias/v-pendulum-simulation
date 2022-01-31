@@ -14,8 +14,8 @@ fn main() {
 	height := img_settings.height
 	total_pixels := width * height
 
-	request_chan := chan &sim.SimRequest{cap: total_pixels}
-	result_chan := chan &sim.SimResult{cap: total_pixels}
+	request_chan := chan &sim.SimRequest{}
+	result_chan := chan &sim.SimResult{cap: args.workers}
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img_settings) ?
 	mut image_writer := img.new_image_writer(mut writer, img_settings)
@@ -28,7 +28,6 @@ fn main() {
 		sim.log('Waiting for workers to finish')
 		workers.wait()
 		result_chan.close()
-		sim.log('Waiting for image writer to finish')
 		bmark.measure(@FN)
 		sim.log('Closing writer file')
 		writer.close()
