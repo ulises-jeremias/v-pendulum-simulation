@@ -14,8 +14,8 @@
 ##         --use-prod                        Execute tests using prod mode compilation
 ##         --use-prod                        Execute tests using prod mode compilation
 ##         --use-gc=GC_STRATEGY              Execute tests using gc
-##         --width=WIDTH                     Grid width. 600 by default.
-##         --height=HEIGHT                   Grid height. 600 by default.
+##         --width=WIDTH                     Grid width. 400 by default.
+##         --height=HEIGHT                   Grid height. 400 by default.
 ##         --workers=NUM_WORKERS             Amount of workers to use for parallel simulation. Will use the amount of threads by default.
 ##         --log-file=LOG_FILE_PATH          Path to the file in which you want to store the logs.
 ##
@@ -31,10 +31,39 @@ slugify() {
     echo "$1" | iconv -c -t ascii//TRANSLIT | sed -E 's/[~^]+//g' | sed -E 's/[^a-zA-Z0-9]+/-/g' | sed -E 's/^-+|-+$//g' | tr "[:upper:]" "[:lower:]"
 }
 
+run_test() {
+    program="$1"
+    output_path="$2"
+    flags="$3"
+    execution_flags="$4"
+    log_file="$5"
+
+    describe "Compiling ${program} simulation with flags: \"${flags}\""
+
+    if v ${flags} "${pensim_dir_path}"/"${program}".v &>>"${log_file}"; then
+        log_success "Compilation passed successfully" "" "${log_file}"
+    else
+        log_failed "Compilation failed" "I" "${log_file}"
+    fi
+
+    for i in $(seq 1 ${times}); do
+        describe "Executing ${program} simulation with flags \"${execution_flags} --output ${output_path}\""
+
+        echo &>>"${log_file}"
+        echo &>>"${log_file}"
+
+        if "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"; then
+            log_success "Secuencial Simulation passed successfully" "" "${log_file}"
+        else
+            log_failed "Secuencial Execution failed" "" "${log_file}"
+        fi
+    done
+}
+
 pensim_dir_path=$(dirname "${ROOT}")
 
-height="${height:-600}"
-width="${width:-600}"
+height="${height:-400}"
+width="${width:-400}"
 
 flags=""
 execution_flags="--width ${width} --height ${height}"
@@ -66,38 +95,11 @@ log_file=${log_file:-"${pensim_dir_path}/simulation_log_$(slugify "${flags}_${he
 secuencial_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}").ppm"
 parallel_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}_${workers}").ppm"
 
-describe "Compiling secuencial simulation with flags: \"${flags}\""
-
-if v ${flags} "${pensim_dir_path}"/secuencial.v &>>"${log_file}"; then
-    log_success "Compilation passed successfully" "" "${log_file}"
-else
-    log_failed "Compilation failed" "I" "${log_file}"
-fi
-
-for i in $(seq 1 ${times}); do
-    describe "Executing secuencial simulation with flags \"${execution_flags} --output ${secuencial_output_path}\""
-
-    echo &>>"${log_file}"
-    echo &>>"${log_file}"
-
-    if "${pensim_dir_path}"/secuencial ${execution_flags} --output "${secuencial_output_path}" &>>"${log_file}"; then
-        log_success "Secuencial Simulation passed successfully" "" "${log_file}"
-    else
-        log_failed "Secuencial Execution failed" "" "${log_file}"
-    fi
-done
-
-describe "Compiling parallel simulation with flags: \"${flags}\""
+run_test "secuencial" "${secuencial_output_path}" "${flags}" "${execution_flags}" "${log_file}"
 
 if [[ -n "${use_gc}" ]]; then
     describe "Compiling tests using gc ${use_gc:-boehm}"
     flags="${flags} -gc ${use_gc:-boehm}"
-fi
-
-if v ${flags} "${pensim_dir_path}"/parallel.v &>>"${log_file}"; then
-    log_success "Compilation passed successfully" "" "${log_file}"
-else
-    log_failed "Compilation failed" "" "${log_file}"
 fi
 
 if [[ -n "${workers}" ]]; then
@@ -105,15 +107,5 @@ if [[ -n "${workers}" ]]; then
     execution_flags="${execution_flags} --workers ${workers}"
 fi
 
-for i in $(seq 1 ${times}); do
-    describe "Executing parallel simulation with flags \"${execution_flags} --output ${parallel_output_path}\""
-
-    echo &>>"${log_file}"
-    echo &>>"${log_file}"
-
-    if "${pensim_dir_path}"/parallel ${execution_flags} --output "${parallel_output_path}" &>>"${log_file}"; then
-        log_success "Parallel Simulation passed successfully" "" "${log_file}"
-    else
-        log_failed "Parallel Execution failed" "" "${log_file}"
-    fi
-done
+run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
