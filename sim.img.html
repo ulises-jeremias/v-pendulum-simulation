@@ -76,6 +76,11 @@
 
 
 </section>
+						<section id="new_image_writer" class="doc-node">
+							<div class="title"><h2>fn new_image_writer <a href="#new_image_writer">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_image_writer</span><span class="token punctuation">(</span><span class="token keyword">mut</span> writer PPMWriter<span class="token punctuation">,</span> settings ImageSettings<span class="token punctuation">)</span> <span class="token operator">&</span>ImageWritter</code></pre>
+
+
+</section>
 						<section id="ppm_writer_for_fname" class="doc-node">
 							<div class="title"><h2>fn ppm_writer_for_fname <a href="#ppm_writer_for_fname">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">ppm_writer_for_fname</span><span class="token punctuation">(</span>fname <span class="token builtin">string</span><span class="token punctuation">,</span> settings ImageSettings<span class="token punctuation">)</span> ?<span class="token operator">&</span>PPMWriter</code></pre>
 
@@ -93,6 +98,22 @@
 </section>
 						<section id="ImageSettings.to_grid_settings" class="doc-node">
 							<div class="title"><h2>fn (ImageSettings) to_grid_settings <a href="#ImageSettings.to_grid_settings">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>s ImageSettings<span class="token punctuation">)</span> <span class="token function">to_grid_settings</span><span class="token punctuation">(</span><span class="token punctuation">)</span> sim<span class="token punctuation">.</span>GridSettings</code></pre>
+
+
+</section>
+						<section id="ImageWritter" class="doc-node">
+							<div class="title"><h2>struct ImageWritter <a href="#ImageWritter">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">ImageWritter</span> <span class="token punctuation">{</span>
+	settings ImageSettings
+<span class="token keyword">pub</span> <span class="token keyword">mut</span><span class="token punctuation">:</span>
+	writer        PPMWriter
+	current_index <span class="token builtin">int</span>
+	buffer        <span class="token punctuation">[</span><span class="token punctuation">]</span>ValidColor
+<span class="token punctuation">}</span></code></pre>
+
+
+</section>
+						<section id="ImageWritter.handle" class="doc-node">
+							<div class="title"><h2>fn (ImageWritter) handle <a href="#ImageWritter.handle">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> iw ImageWritter<span class="token punctuation">)</span> <span class="token function">handle</span><span class="token punctuation">(</span>result sim<span class="token punctuation">.</span>SimResult<span class="token punctuation">)</span> ?<span class="token builtin">int</span></code></pre>
 
 
 </section>
@@ -142,7 +163,7 @@
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 31 Jan 2022 04:30:17
+							Powered by vdoc. Generated on: 31 Jan 2022 05:26:41
 						</div>
 					</div>
 					<div class="doc-toc"><ul><li class="open"><a href="#compute_pixel">fn compute_pixel</a>        <ul>
@@ -157,11 +178,18 @@
 <li class="open"><a href="#new_image_settings">fn new_image_settings</a>        <ul>
 </ul>
 </li>
+<li class="open"><a href="#new_image_writer">fn new_image_writer</a>        <ul>
+</ul>
+</li>
 <li class="open"><a href="#ppm_writer_for_fname">fn ppm_writer_for_fname</a>        <ul>
 </ul>
 </li>
 <li class="open"><a href="#ImageSettings">struct ImageSettings</a>        <ul>
 <li><a href="#ImageSettings.to_grid_settings">fn to_grid_settings</a></li>
+</ul>
+</li>
+<li class="open"><a href="#ImageWritter">struct ImageWritter</a>        <ul>
+<li><a href="#ImageWritter.handle">fn handle</a></li>
 </ul>
 </li>
 <li class="open"><a href="#PPMWriter">struct PPMWriter</a>        <ul>
