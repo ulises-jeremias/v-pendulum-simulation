@@ -18,26 +18,13 @@ fn main() {
 		writer.close()
 	}
 
-	height := args.grid.height
-	width := args.grid.width
-	total_pixels := height * width
-
-	mut results := []&sim.SimResult{len: total_pixels}
-
-	handle_request := fn [mut results] (request &sim.SimRequest) ? {
+	handle_request := fn [mut writer] (request &sim.SimRequest) ? {
 		result := sim.compute_result(request)
-		results[result.id] = result
+		pixel := img.compute_pixel(result)
+		return writer.handle_pixel(pixel)
 	}
 
 	sim.run(args.params, grid: args.grid, on_request: sim.SimRequestHandler(handle_request))
-
-	for result in results {
-		pixel := img.compute_pixel(result)
-		writer.handle_pixel(pixel) or {
-			sim.log(@MOD + '.' + @FN + ': pixel handler failed. Error $err')
-			break
-		}
-	}
 
 	writer.write() ?
 }
