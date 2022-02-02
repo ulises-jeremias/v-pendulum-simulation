@@ -9,7 +9,7 @@
 ##     -h, --help                            Prints usage and example
 ##         --times=TIMES                     Number of times to run the benchmark
 ##         --parallel-only                   Only run the parallel benchmarks
-##         --secuential-only                 Only run the secuential benchmarks
+##         --sequential-only                 Only run the sequential benchmarks
 ##         --stats                           Exeute with stats
 ##         --use-verbose                     Compile in verbose mode
 ##         --use-autofree                    Execute tests using atofree
@@ -58,9 +58,9 @@ run_test() {
         echo &>>"${log_file}"
 
         if "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"; then
-            log_success "Secuential Simulation passed successfully" "" "${log_file}"
+            log_success "Sequential Simulation passed successfully" "" "${log_file}"
         else
-            log_failed "Secuential Execution failed" "" "${log_file}"
+            log_failed "Sequential Execution failed" "" "${log_file}"
         fi
     done
 }
@@ -97,11 +97,11 @@ log_file=${log_file:-"${pensim_dir_path}/simulation_log_$(slugify "${flags}_${he
 
 [ ! -f "${log_file}" ] && touch "${log_file}"
 
-secuential_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}").ppm"
+sequential_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}").ppm"
 parallel_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}_${workers}").ppm"
 
 if [[ -z "${parallel_only}" ]]; then
-    run_test "secuential" "${secuential_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    run_test "sequential" "${sequential_output_path}" "${flags}" "${execution_flags}" "${log_file}"
 fi
 
 if [[ -n "${use_gc}" ]]; then
@@ -114,7 +114,7 @@ if [[ -n "${workers}" ]]; then
     execution_flags="${execution_flags} --workers ${workers}"
 fi
 
-if [[ -z "${secuential_only}" ]]; then
+if [[ -z "${sequential_only}" ]]; then
     run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
     run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
 fi

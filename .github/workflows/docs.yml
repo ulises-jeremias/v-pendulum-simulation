@@ -27,7 +27,7 @@ jobs:
         run: |
           rm -f ./v-pendulum-simulation/README.md
           rm -f ./v-pendulum-simulation/animation.v
-          rm -f ./v-pendulum-simulation/secuential.v
+          rm -f ./v-pendulum-simulation/sequential.v
           rm -f ./v-pendulum-simulation/parallel.v
           rm -f ./v-pendulum-simulation/full.v
           mv ./v-pendulum-simulation/static/DOCS.md ./v-pendulum-simulation/README.md

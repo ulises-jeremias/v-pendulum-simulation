@@ -11,12 +11,12 @@ const max_parallel_workers = runtime.nr_jobs()
 
 [params]
 pub struct ParserSettings {
-	secuential    bool
+	sequential    bool
 	img           bool
 	extra_workers int
 }
 
-pub struct SecuentialArgs {
+pub struct SequentialArgs {
 pub:
 	params   sim.SimParams
 	grid     sim.GridSettings
@@ -24,16 +24,16 @@ pub:
 }
 
 pub struct ParallelArgs {
-	SecuentialArgs
+	SequentialArgs
 pub:
 	workers int = args.max_parallel_workers
 }
 
-pub type SimArgs = ParallelArgs | SecuentialArgs
+pub type SimArgs = ParallelArgs | SequentialArgs
 
 pub fn parse_args(config ParserSettings) ?SimArgs {
-	if config.secuential {
-		args := parse_secuential_args() ?
+	if config.sequential {
+		args := parse_sequential_args() ?
 		return SimArgs(args)
 	} else {
 		args := parse_parallel_args(config.extra_workers) ?
@@ -41,7 +41,7 @@ pub fn parse_args(config ParserSettings) ?SimArgs {
 	}
 }
 
-fn parse_secuential_args() ?SecuentialArgs {
+fn parse_sequential_args() ?SequentialArgs {
 	mut fp := flag.new_flag_parser(os.args)
 	fp.application('vps')
 	fp.version('v0.1.0')
@@ -81,7 +81,7 @@ fn parse_secuential_args() ?SecuentialArgs {
 		height: height
 	)
 
-	args := SecuentialArgs{
+	args := SequentialArgs{
 		params: params
 		filename: filename
 		grid: grid

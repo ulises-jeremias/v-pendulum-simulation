@@ -46,7 +46,7 @@ jobs:
 
       - name: Execute Tests with Flags ${{ matrix.flags }} 5 times
         run: |
-          ./v-pendulum-simulation/bin/run-benchmark-test --secuential-only ${{ matrix.flags }}
+          ./v-pendulum-simulation/bin/run-benchmark-test --sequential-only ${{ matrix.flags }}
           for workers in 1 2 4 6; do
             ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --workers=${{ matrix.workers }} ${{ matrix.flags }}
           done

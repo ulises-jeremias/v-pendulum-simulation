@@ -18,11 +18,11 @@
 
 ## Run the examples
 
-- Secuential Simulation
+- Sequential Simulation
 
 ```sh
-$ v -gc boehm -prod secuential.v
-$ ./secuential # execute ./secuential -h for more info
+$ v -gc boehm -prod sequential.v
+$ ./sequential # execute ./sequential -h for more info
 ```
 
 - Parallel Simulation
