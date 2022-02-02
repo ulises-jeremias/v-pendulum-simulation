@@ -48,7 +48,7 @@ jobs:
         run: |
           ./v-pendulum-simulation/bin/run-benchmark-test --sequential-only ${{ matrix.flags }}
           for workers in 1 2 4 6; do
-            ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --workers=${{ matrix.workers }} ${{ matrix.flags }}
+            ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --workers=${workers} ${{ matrix.flags }}
           done
 
       - name: Create artifact with execution logs
