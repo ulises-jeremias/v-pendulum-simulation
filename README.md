@@ -18,7 +18,7 @@
 
 ## Run the examples
 
-- Secuencial Simulation
+- Secuential Simulation
 
 ```sh
 $ v -gc boehm -prod secuential.v

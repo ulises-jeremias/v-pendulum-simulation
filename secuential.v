@@ -6,7 +6,7 @@ import sim.args as simargs
 import sim.img
 
 fn main() {
-	args := simargs.parse_args(secuential: true) ? as simargs.SecuencialArgs
+	args := simargs.parse_args(secuential: true) ? as simargs.SecuentialArgs
 
 	mut bmark := benchmark.start()
 	defer {

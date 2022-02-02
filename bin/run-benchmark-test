@@ -58,9 +58,9 @@ run_test() {
         echo &>>"${log_file}"
 
         if "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"; then
-            log_success "Secuencial Simulation passed successfully" "" "${log_file}"
+            log_success "Secuential Simulation passed successfully" "" "${log_file}"
         else
-            log_failed "Secuencial Execution failed" "" "${log_file}"
+            log_failed "Secuential Execution failed" "" "${log_file}"
         fi
     done
 }
