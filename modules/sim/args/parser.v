@@ -11,7 +11,7 @@ const max_parallel_workers = runtime.nr_jobs()
 
 [params]
 pub struct ParserSettings {
-	secuencial    bool
+	secuential    bool
 	img           bool
 	extra_workers int
 }
@@ -32,8 +32,8 @@ pub:
 pub type SimArgs = ParallelArgs | SecuencialArgs
 
 pub fn parse_args(config ParserSettings) ?SimArgs {
-	if config.secuencial {
-		args := parse_secuencial_args() ?
+	if config.secuential {
+		args := parse_secuential_args() ?
 		return SimArgs(args)
 	} else {
 		args := parse_parallel_args(config.extra_workers) ?
@@ -41,7 +41,7 @@ pub fn parse_args(config ParserSettings) ?SimArgs {
 	}
 }
 
-fn parse_secuencial_args() ?SecuencialArgs {
+fn parse_secuential_args() ?SecuencialArgs {
 	mut fp := flag.new_flag_parser(os.args)
 	fp.application('vps')
 	fp.version('v0.1.0')

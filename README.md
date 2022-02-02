@@ -21,8 +21,8 @@
 - Secuencial Simulation
 
 ```sh
-$ v -gc boehm -prod secuencial.v
-$ ./secuencial # execute ./secuencial -h for more info
+$ v -gc boehm -prod secuential.v
+$ ./secuential # execute ./secuential -h for more info
 ```
 
 - Parallel Simulation

@@ -12,7 +12,7 @@ fns.txt
 main
 parallel
 parallel_with_iw
-secuencial
+secuential
 animation
 full
 *.log
