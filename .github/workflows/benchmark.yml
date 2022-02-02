@@ -35,14 +35,21 @@ jobs:
 
       - name: Build and Install V
         run: |
-          make
-          sudo ./v symlink
+          if ! type -p v >/dev/null; then
+            make
+            sudo ./v symlink
+          fi
+          v up
 
       - name: V doctor
         run: v doctor
 
       - name: Execute Tests with Flags ${{ matrix.flags }} 5 times
-        run: ./v-pendulum-simulation/bin/run-benchmark-test ${{ matrix.flags }}
+        run: |
+          ./v-pendulum-simulation/bin/run-benchmark-test --secuencial-only ${{ matrix.flags }}
+          for workers in 1 2 4 6; do
+            ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --workers=${{ matrix.workers }} ${{ matrix.flags }}
+          done
 
       - name: Create artifact with execution logs
         uses: actions/upload-artifact@v2

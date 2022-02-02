@@ -8,6 +8,8 @@
 ## Options:
 ##     -h, --help                            Prints usage and example
 ##         --times=TIMES                     Number of times to run the benchmark
+##         --parallel-only                   Only run the parallel benchmarks
+##         --secuential-only                 Only run the secuential benchmarks
 ##         --stats                           Exeute with stats
 ##         --use-verbose                     Compile in verbose mode
 ##         --use-autofree                    Execute tests using atofree
@@ -98,7 +100,9 @@ log_file=${log_file:-"${pensim_dir_path}/simulation_log_$(slugify "${flags}_${he
 secuencial_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}").ppm"
 parallel_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${width}_${workers}").ppm"
 
-run_test "secuencial" "${secuencial_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+if [[ -z "${parallel_only}" ]]; then
+    run_test "secuencial" "${secuencial_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+fi
 
 if [[ -n "${use_gc}" ]]; then
     describe "Compiling tests using gc ${use_gc:-boehm}"
@@ -110,5 +114,7 @@ if [[ -n "${workers}" ]]; then
     execution_flags="${execution_flags} --workers ${workers}"
 fi
 
-run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
-run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+if [[ -z "${secuencial_only}" ]]; then
+    run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+fi
