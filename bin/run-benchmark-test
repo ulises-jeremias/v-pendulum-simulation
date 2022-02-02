@@ -73,23 +73,28 @@ width="${width:-400}"
 flags=""
 execution_flags="--width ${width} --height ${height}"
 
+if [[ -n "${use_gc}" ]]; then
+    describe "Compiling tests using gc ${use_gc}"
+    flags="${flags} -gc ${use_gc}"
+fi
+
 if [[ -n "${use_verbose}" ]]; then
-    describe "Running tests in verbose mode"
+    describe "Compiling tests in verbose mode"
     flags="${flags} -d verbose"
 fi
 
 if [[ -n "${use_autofree}" ]]; then
-    describe "Running tests using Autofree"
+    describe "Compiling tests using Autofree"
     flags="${flags} -autofree"
 fi
 
 if [[ -n "${use_prod}" ]]; then
-    describe "Running tests using prod mode"
+    describe "Compiling tests using prod mode"
     flags="${flags} -prod"
 fi
 
 if [[ -n "${stats}" ]]; then
-    describe "Running tests with stats"
+    describe "Compiling tests with stats"
     flags="${flags} -stats"
 fi
 
@@ -102,11 +107,6 @@ parallel_output_path="${pensim_dir_path}/$(slugify "output_${flags}_${height}x${
 
 if [[ -z "${parallel_only}" ]]; then
     run_test "sequential" "${sequential_output_path}" "${flags}" "${execution_flags}" "${log_file}"
-fi
-
-if [[ -n "${use_gc}" ]]; then
-    describe "Compiling tests using gc ${use_gc:-boehm}"
-    flags="${flags} -gc ${use_gc:-boehm}"
 fi
 
 if [[ -n "${workers}" ]]; then
