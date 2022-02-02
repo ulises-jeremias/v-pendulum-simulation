@@ -13,11 +13,11 @@ jobs:
       max-parallel: 1
       matrix:
         flags:
-          - "--use-prod --use-gc=boehm --times=5 --width=100 --height=100"
-          - "--use-prod --use-gc=boehm --times=5 --width=150 --height=150"
-          - "--use-prod --use-gc=boehm --times=5 --width=200 --height=200"
-          - "--use-prod --use-gc=boehm --times=5 --width=300 --height=300"
-          - "--use-prod --use-gc=boehm --times=5 --width=400 --height=400"
+          # - "--use-prod --use-gc=boehm --times=5 --width=100 --height=100"
+          # - "--use-prod --use-gc=boehm --times=5 --width=150 --height=150"
+          # - "--use-prod --use-gc=boehm --times=5 --width=200 --height=200"
+          # - "--use-prod --use-gc=boehm --times=5 --width=300 --height=300"
+          # - "--use-prod --use-gc=boehm --times=5 --width=400 --height=400"
           - "--use-prod --use-gc=boehm --times=5 --width=600 --height=600"
           - "--use-prod --use-gc=boehm --times=5 --width=800 --height=800"
           - "--use-prod --use-gc=boehm --times=5 --width=1000 --height=1000"
