@@ -62,13 +62,13 @@
 
 </section>
 						<section id="SimArgs" class="doc-node">
-							<div class="title"><h2>type SimArgs <a href="#SimArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimArgs <span class="token operator">=</span> ParallelArgs <span class="token operator">|</span> SecuencialArgs</code></pre>
+							<div class="title"><h2>type SimArgs <a href="#SimArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> SimArgs <span class="token operator">=</span> ParallelArgs <span class="token operator">|</span> SecuentialArgs</code></pre>
 
 
 </section>
 						<section id="ParallelArgs" class="doc-node">
 							<div class="title"><h2>struct ParallelArgs <a href="#ParallelArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">ParallelArgs</span> <span class="token punctuation">{</span>
-	SecuencialArgs
+	SecuentialArgs
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
 	workers <span class="token builtin">int</span> <span class="token operator">=</span> args<span class="token punctuation">.</span>max_parallel_workers
 <span class="token punctuation">}</span></code></pre>
@@ -84,8 +84,8 @@
 
 
 </section>
-						<section id="SecuencialArgs" class="doc-node">
-							<div class="title"><h2>struct SecuencialArgs <a href="#SecuencialArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">SecuencialArgs</span> <span class="token punctuation">{</span>
+						<section id="SecuentialArgs" class="doc-node">
+							<div class="title"><h2>struct SecuentialArgs <a href="#SecuentialArgs">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">SecuentialArgs</span> <span class="token punctuation">{</span>
 <span class="token keyword">pub</span><span class="token punctuation">:</span>
 	params   sim<span class="token punctuation">.</span>SimParams
 	grid     sim<span class="token punctuation">.</span>GridSettings
@@ -96,7 +96,7 @@
 </section>
 
 						<div class="footer">
-							Powered by vdoc. Generated on: 2 Feb 2022 05:15:48
+							Powered by vdoc. Generated on: 2 Feb 2022 05:16:14
 						</div>
 					</div>
 					<div class="doc-toc"><ul><li class="open"><a href="#parse_args">fn parse_args</a>        <ul>
@@ -111,7 +111,7 @@
 <li class="open"><a href="#ParserSettings">struct ParserSettings</a>        <ul>
 </ul>
 </li>
-<li class="open"><a href="#SecuencialArgs">struct SecuencialArgs</a>        <ul>
+<li class="open"><a href="#SecuentialArgs">struct SecuentialArgs</a>        <ul>
 </ul>
 </li>
 </ul></div>
