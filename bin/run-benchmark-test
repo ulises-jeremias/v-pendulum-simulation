@@ -19,6 +19,7 @@
 ##         --width=WIDTH                     Grid width. 400 by default.
 ##         --height=HEIGHT                   Grid height. 400 by default.
 ##         --workers=NUM_WORKERS             Amount of workers to use for parallel simulation. Will use the amount of threads by default.
+##         --jobs=NUM_JOBS                   Amount of jobs to use for parallel simulation. Will use the amount of threads by default.
 ##         --log-file=LOG_FILE_PATH          Path to the file in which you want to store the logs.
 ##
 
@@ -57,7 +58,7 @@ run_test() {
         echo &>>"${log_file}"
         echo &>>"${log_file}"
 
-        if "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"; then
+        if VJOBS="${jobs}" "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"; then
             log_success "${program}: Simulation passed successfully" "" "${log_file}"
         else
             log_failed "${program}: Execution failed" "" "${log_file}"
