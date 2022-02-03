@@ -23,15 +23,15 @@ jobs:
           - "--use-prod --use-gc=boehm --times=5 --width=1000 --height=1000"
 
     steps:
-      - name: Checkout Latest V
-        uses: actions/checkout@v2
-        with:
-          repository: vlang/v
+      # - name: Checkout Latest V
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: vlang/v
 
-      - name: Build V
-        run: |
-          make
-          sudo ./v symlink
+      # - name: Build V
+      #   run: |
+      #     make
+      #     sudo ./v symlink
 
       - name: Checkout Pendulum Simulation
         uses: actions/checkout@v2
