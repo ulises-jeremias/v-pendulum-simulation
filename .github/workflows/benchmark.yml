@@ -28,18 +28,15 @@ jobs:
         with:
           repository: vlang/v
 
+      - name: Build V
+        run: |
+          make
+          sudo ./v symlink
+
       - name: Checkout Pendulum Simulation
         uses: actions/checkout@v2
         with:
           path: v-pendulum-simulation
-
-      - name: Build and Install V
-        run: |
-          if ! type -p v >/dev/null; then
-            make
-            sudo ./v symlink
-          fi
-          v up
 
       - name: V doctor
         run: v doctor
