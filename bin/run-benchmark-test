@@ -119,6 +119,6 @@ if [[ -n "${workers}" ]]; then
 fi
 
 if [[ -z "${sequential_only}" ]]; then
-    # run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
     run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
 fi
