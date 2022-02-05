@@ -25,9 +25,12 @@ pub mut:
 }
 
 pub fn new_app(args simargs.ParallelArgs) &App {
+	total_pixels := args.grid.height * args.grid.width
+
 	mut app := &App{
 		args: args
-		pixels: []u32{len: args.grid.height * args.grid.width}
+		pixels: []u32{len: total_pixels}
+		request_chan: chan &sim.SimRequest{cap: args.grid.width}
 	}
 	app.gg = gg.new_context(
 		width: args.grid.width

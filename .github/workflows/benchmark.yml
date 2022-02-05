@@ -43,8 +43,8 @@ jobs:
 
       - name: Execute Tests with Flags ${{ matrix.flags }} 5 times
         run: |
-          ./v-pendulum-simulation/bin/run-benchmark-test --sequential-only ${{ matrix.flags }}
-          for jobs in 0 1 2 3 4 6; do
+          # ./v-pendulum-simulation/bin/run-benchmark-test --sequential-only ${{ matrix.flags }}
+          for jobs in 1 2 4 6; do
             ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --jobs=${jobs} ${{ matrix.flags }}
           done
 

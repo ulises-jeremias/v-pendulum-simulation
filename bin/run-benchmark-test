@@ -55,10 +55,11 @@ run_test() {
     for i in $(seq 1 ${times}); do
         describe "Executing ${program} simulation with flags \"${execution_flags} --output ${output_path}\""
 
-        echo &>>"${log_file}"
+        echo
         echo &>>"${log_file}"
 
-        if VJOBS="${jobs}" "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"; then
+        VJOBS="${jobs}" "${pensim_dir_path}"/"${program}" ${execution_flags} --output "${output_path}" &>>"${log_file}"
+        if [[ $? -eq 0 ]]; then
             log_success "${program}: Simulation passed successfully" "" "${log_file}"
         else
             log_failed "${program}: Execution failed" "" "${log_file}"
@@ -71,13 +72,10 @@ pensim_dir_path=$(dirname "${ROOT}")
 height="${height:-400}"
 width="${width:-400}"
 
+jobs="${jobs:-$(nproc --ignore=1)}"
+
 flags=""
 execution_flags="--width ${width} --height ${height}"
-
-if [[ -n "${use_gc}" ]]; then
-    describe "Compiling tests using gc ${use_gc}"
-    flags="${flags} -gc ${use_gc}"
-fi
 
 if [[ -n "${use_verbose}" ]]; then
     describe "Compiling tests in verbose mode"
@@ -99,6 +97,11 @@ if [[ -n "${stats}" ]]; then
     flags="${flags} -stats"
 fi
 
+if [[ -n "${use_gc}" ]]; then
+    describe "Compiling tests using gc ${use_gc}"
+    flags="${flags} -gc ${use_gc}"
+fi
+
 log_file=${log_file:-"${pensim_dir_path}/simulation_log_$(slugify "${flags}_${height}x${width}").log"}
 
 [ ! -f "${log_file}" ] && touch "${log_file}"
@@ -116,6 +119,6 @@ if [[ -n "${workers}" ]]; then
 fi
 
 if [[ -z "${sequential_only}" ]]; then
-    run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    # run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
     run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
 fi

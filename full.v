@@ -9,14 +9,18 @@ import sim.img
 fn main() {
 	args := simargs.parse_args(extra_workers: 1) ? as simargs.ParallelArgs
 
-	mut writer := img.ppm_writer_for_fname(args.filename, img.image_settings_from_grid(args.grid)) ?
+	img_settings := img.image_settings_from_grid(args.grid)
+
+	result_chan := chan &sim.SimResult{cap: args.workers}
+
+	mut writer := img.ppm_writer_for_fname(args.filename, img_settings) ?
 
 	mut app := anim.new_app(args)
 	mut workers := []thread{cap: args.workers + 1}
 
 	mut bmark := benchmark.start()
 
-	img_result_chan := chan &sim.SimResult{}
+	img_result_chan := chan &sim.SimResult{cap: args.workers}
 
 	defer {
 		image_worker := workers.pop()
@@ -43,7 +47,7 @@ fn main() {
 		app.request_chan <- request
 	}
 
-	workers << go img.image_worker(mut writer, img_result_chan, img.image_settings_from_grid(args.grid))
+	workers << go img.image_worker(mut writer, img_result_chan, img_settings)
 
 	go app.gg.run()
 
