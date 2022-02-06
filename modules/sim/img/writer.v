@@ -1,6 +1,5 @@
 module img
 
-import benchmark
 import gx
 import sim
 

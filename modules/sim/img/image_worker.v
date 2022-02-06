@@ -1,7 +1,6 @@
 module img
 
 import benchmark
-import gx
 import sim
 
 pub fn image_worker(mut writer PPMWriter, result_chan chan &sim.SimResult, settings ImageSettings) {
