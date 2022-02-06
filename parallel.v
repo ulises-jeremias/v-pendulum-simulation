@@ -14,7 +14,7 @@ fn main() {
 	height := img_settings.height
 	total_pixels := width * height
 
-	request_chan := chan &sim.SimRequest{}
+	request_chan := chan &sim.SimRequest{cap: args.workers}
 	result_chan := chan &sim.SimResult{cap: args.workers}
 
 	mut writer := img.ppm_writer_for_fname(args.filename, img_settings) ?
