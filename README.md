@@ -12,7 +12,7 @@
 [![Docs Validation][validatedocsbadge]][validatedocsurl]
 [![License: MIT][licensebadge]][licenseurl]
 
-![image](https://user-images.githubusercontent.com/17727170/142896769-22cc7af7-8f70-47ea-a6f0-f7218196593c.png)
+![image](https://user-images.githubusercontent.com/17727170/152750137-98e7c5a3-936b-4bc8-b71a-1b182c0bbf50.png)
 
 </div>
 
