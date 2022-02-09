@@ -47,6 +47,9 @@ jobs:
           for jobs in 1 2 4 6; do
             ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --jobs=${jobs} ${{ matrix.flags }}
           done
+          for jobs in 1 2 4 6; do
+            ./v-pendulum-simulation/bin/run-benchmark-test --parallel-only --use-image-worker --jobs=${jobs} ${{ matrix.flags }}
+          done
 
       - name: Create artifact with execution logs
         uses: actions/upload-artifact@v2

@@ -9,6 +9,7 @@
 ##     -h, --help                            Prints usage and example
 ##         --times=TIMES                     Number of times to run the benchmark
 ##         --parallel-only                   Only run the parallel benchmarks
+##         --use-image-worker                Use the image worker
 ##         --sequential-only                 Only run the sequential benchmarks
 ##         --stats                           Exeute with stats
 ##         --use-verbose                     Compile in verbose mode
@@ -21,7 +22,6 @@
 ##         --workers=NUM_WORKERS             Amount of workers to use for parallel simulation. Will use the amount of threads by default.
 ##         --jobs=NUM_JOBS                   Amount of jobs to use for parallel simulation. Will use the amount of threads by default.
 ##         --log-file=LOG_FILE_PATH          Path to the file in which you want to store the logs.
-##
 
 ROOT=$(dirname "$0")
 
@@ -119,6 +119,10 @@ if [[ -n "${workers}" ]]; then
 fi
 
 if [[ -z "${sequential_only}" ]]; then
-    run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
-    run_test "parallel_with_iw" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    if [[ -z "${use_image_worker}" ]]; then
+        run_test "parallel" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    fi
+    if [[ -n "${use_image_worker}" ]]; then
+        run_test "parallel_image_worker" "${parallel_output_path}" "${flags}" "${execution_flags}" "${log_file}"
+    fi
 fi
