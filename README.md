@@ -1,4 +1,12 @@
 <div align="center">
+<p>
+    <img
+        style="width: 250px"
+        width="250"
+        src="https://user-images.githubusercontent.com/17727170/153699135-a63e9644-1a29-4c04-9de3-c9100b06001d.png"
+    >
+</p>
+  
 <h1>Pendulum Simulation in V</h1>
 
 [vlang.io](https://vlang.io) |
@@ -12,41 +20,43 @@
 [![Docs Validation][validatedocsbadge]][validatedocsurl]
 [![License: MIT][licensebadge]][licenseurl]
 
-![image](https://user-images.githubusercontent.com/17727170/152750137-98e7c5a3-936b-4bc8-b71a-1b182c0bbf50.png)
-
 </div>
 
-## Run the examples
+## Run the Simulations
 
-- Sequential Simulation
+### Sequential Simulation
 
 ```sh
 $ v -gc boehm -prod sequential.v
 $ ./sequential # execute ./sequential -h for more info
 ```
 
-- Parallel Simulation
+### Parallel Simulation
 
 ```sh
 $ v -gc boehm -prod parallel.v
 $ ./parallel # execute ./parallel -h for more info
 ```
 
-- Parallel Simulation with Image Worker
+![image](https://user-images.githubusercontent.com/17727170/153699093-5fd5c8bb-fa7f-4a34-b579-72a38edcde0e.png)
+
+### Parallel Simulation with Image Worker
 
 ```sh
 $ v -gc boehm -prod parallel_with_iw.v
 $ ./parallel_with_iw # execute ./parallel_with_iw -h for more info
 ```
 
-- Parallel Simulation with Graphic User Interface
+![image](https://user-images.githubusercontent.com/17727170/153699055-efa7dcab-6abe-4a16-b551-b466dfb05146.png)
+
+### Parallel Simulation with Graphic User Interface
 
 ```sh
 $ v -gc boehm -prod animation.v
 $ ./animation # execute ./animation -h for more info
 ```
 
-- Full Parallel Simulation with Graphic User Interface and Image Output
+### Full Parallel Simulation with Graphic User Interface and Image Output
 
 ```sh
 $ v -gc boehm -prod full.v
@@ -60,6 +70,16 @@ To test the module, just type the following command:
 ```sh
 $ v test .
 ```
+
+## Benchmark
+
+You can execute the following command to execute benchmark tests to get a full comparison between implementations:
+
+```sh
+$ ./bin/run-benchmark-test --help
+```
+
+![image](https://user-images.githubusercontent.com/17727170/152750137-98e7c5a3-936b-4bc8-b71a-1b182c0bbf50.png)
 
 [workflowbadge]: https://github.com/ulises-jeremias/v-pendulum-simulation/workflows/Build%20and%20Test%20with%20deps/badge.svg
 [validatedocsbadge]: https://github.com/ulises-jeremias/v-pendulum-simulation/workflows/Validate%20Docs/badge.svg
