@@ -73,7 +73,9 @@ $ v test .
 
 ## Benchmark
 
-You can execute the following command to execute benchmark tests to get a full comparison between implementations:
+You can execute the following command to execute
+benchmark tests to get a full comparison between
+implementations:
 
 ```sh
 $ ./bin/run-benchmark-test --help
